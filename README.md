@@ -8,7 +8,6 @@
 [![Express](https://img.shields.io/badge/Express-4.21-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
 [![Netlify](https://img.shields.io/badge/Deployed_on-Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)](https://supportflow-ai.netlify.app/)
 [![GitHub](https://img.shields.io/badge/GitHub-bikram73%2FSupportFlow__AI-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/bikram73/SupportFlow_AI)
-[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](./LICENSE)
 
 **An enterprise-grade customer support triage and decision orchestration platform.**  
 Automatically analyzes incoming customer inquiries, extracts semantic intent, assigns urgency levels, computes confidence scores, and routes tickets to appropriate departmental queues with automated human-in-the-loop safeguards.
@@ -34,7 +33,6 @@ Automatically analyzes incoming customer inquiries, extracts semantic intent, as
 | <div align="center">**Follow the installation steps and local development setup.** 👉</div> | <div align="center"><a href="#installation"><img src="https://img.shields.io/badge/🚀%20Installation-F97316?style=for-the-badge" /></a></div> |
 | <div align="center">**View the available REST API endpoints and usage examples.** 👉</div> | <div align="center"><a href="#api"><img src="https://img.shields.io/badge/🌐%20API%20Documentation-0EA5E9?style=for-the-badge" /></a></div> |
 | <div align="center">**Understand the current limitations and known failure cases of the AI extractor.** 👉</div> | <div align="center"><a href="#limitations"><img src="https://img.shields.io/badge/⚠️%20Known%20Limitations-EF4444?style=for-the-badge" /></a></div> |
-| <div align="center">**View the project license information.** 👉</div> | <div align="center"><a href="#license"><img src="https://img.shields.io/badge/📄%20License-6B7280?style=for-the-badge" /></a></div> |
 
 </div>
 
@@ -291,10 +289,6 @@ All endpoints accept and return `application/json`.
 | **Token Length Limits** | Very large stack traces (>15,000 words) may get truncated before analysis. | Pre-processing strips redundant stack repetitions to retain the essential error description. |
 
 ---
-
-<h2 id="license">📄 License</h2>
-
-Distributed under the **MIT License**. See `LICENSE` for more information.
 
 <div align="center">
 
