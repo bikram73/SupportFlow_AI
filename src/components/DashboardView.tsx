@@ -223,7 +223,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onSelectTab }) => 
                         ></span>
                         <div>
                           <span className="text-xs font-bold text-on-surface block">{team.name}</span>
-                          <span className="text-[10px] text-outline">Target SLA: {team.sla}</span>
+                          <span className="text-[10px] text-outline">Demo SLA Target: {team.sla}</span>
                         </div>
                       </div>
                       <div className="text-right">
@@ -239,9 +239,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onSelectTab }) => 
             </div>
 
             <div className="pt-3 sm:pt-4 mt-4 border-t border-outline-variant text-[11px] sm:text-xs text-outline flex justify-between">
-              <span>Routing SLA Compliance</span>
+              <span>Session Telemetry</span>
               <span className="font-bold text-emerald-600">
-                {stats.totalCount > 0 ? '100% Verified' : 'Standby'}
+                {stats.totalCount > 0 ? `Calculated from ${stats.totalCount} tickets` : 'Standby (0 tickets)'}
               </span>
             </div>
           </div>

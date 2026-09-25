@@ -22,10 +22,10 @@ export const AboutView: React.FC<AboutViewProps> = ({ onSelectTab }) => {
           </p>
           <div className="flex justify-center gap-2 mt-4 sm:mt-6 flex-wrap">
             <span className="px-2.5 sm:px-3 py-1 bg-surface-container-high rounded-full text-[11px] sm:text-xs font-bold text-on-surface">
-              High Velocity (~0.8s)
+              Real-Time Triage
             </span>
             <span className="px-2.5 sm:px-3 py-1 bg-surface-container-high rounded-full text-[11px] sm:text-xs font-bold text-on-surface">
-              Enterprise Grade SLA
+              Session-Based Demo
             </span>
             <span className="px-2.5 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-[11px] sm:text-xs font-bold">
               AI-Powered Engine
@@ -41,7 +41,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ onSelectTab }) => {
             </div>
             <h3 className="font-bold text-base sm:text-lg text-on-surface mb-2">Manual Congestion</h3>
             <p className="text-on-surface-variant text-xs sm:text-sm leading-relaxed">
-              Human agents spend up to 25% of their working hours manually triaging, reading, and assigning tickets to the right queues.
+              Manual triage consumes significant agent time, leading to queue backlog and delay during support volume spikes.
             </p>
           </div>
 

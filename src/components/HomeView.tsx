@@ -184,24 +184,24 @@ export const HomeView: React.FC<HomeViewProps> = ({ onSelectTab, onTrySample }) 
             </div>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
               <div className="glass-card p-4 sm:p-6 rounded-2xl border border-white/20 text-on-surface">
-                <div className="text-primary text-2xl sm:text-3xl font-extrabold mb-1">-85%</div>
-                <div className="font-bold text-xs sm:text-sm mb-1">Manual Triage</div>
-                <p className="text-on-surface-variant text-[11px] sm:text-xs">Eliminates repetitive manual sorting of inbound messages.</p>
+                <div className="text-primary text-2xl sm:text-3xl font-extrabold mb-1">Real-Time</div>
+                <div className="font-bold text-xs sm:text-sm mb-1">Instant Triage</div>
+                <p className="text-on-surface-variant text-[11px] sm:text-xs">Automated intent and urgency classification in seconds.</p>
               </div>
               <div className="glass-card p-4 sm:p-6 rounded-2xl border border-white/20 text-on-surface">
-                <div className="text-primary text-2xl sm:text-3xl font-extrabold mb-1">4.2x</div>
-                <div className="font-bold text-xs sm:text-sm mb-1">Faster Response</div>
-                <p className="text-on-surface-variant text-[11px] sm:text-xs">Tickets reach the right engineer immediately upon submission.</p>
+                <div className="text-primary text-2xl sm:text-3xl font-extrabold mb-1">12</div>
+                <div className="font-bold text-xs sm:text-sm mb-1">Standard Categories</div>
+                <p className="text-on-surface-variant text-[11px] sm:text-xs">Taxonomy-controlled routing across enterprise domains.</p>
               </div>
               <div className="glass-card p-4 sm:p-6 rounded-2xl border border-white/20 text-on-surface">
-                <div className="text-primary text-2xl sm:text-3xl font-extrabold mb-1">99%</div>
-                <div className="font-bold text-xs sm:text-sm mb-1">Routing Accuracy</div>
-                <p className="text-on-surface-variant text-[11px] sm:text-xs">Strict taxonomy prevents cross-department ping-pong.</p>
+                <div className="text-primary text-2xl sm:text-3xl font-extrabold mb-1">10</div>
+                <div className="font-bold text-xs sm:text-sm mb-1">Target Queues</div>
+                <p className="text-on-surface-variant text-[11px] sm:text-xs">Strict team mapping prevents misrouted support tickets.</p>
               </div>
               <div className="glass-card p-4 sm:p-6 rounded-2xl border border-white/20 text-on-surface">
-                <div className="text-primary text-2xl sm:text-3xl font-extrabold mb-1">100%</div>
+                <div className="text-primary text-2xl sm:text-3xl font-extrabold mb-1">Stateless</div>
                 <div className="font-bold text-xs sm:text-sm mb-1">Zero Database</div>
-                <p className="text-on-surface-variant text-[11px] sm:text-xs">Stateless, fast in-memory execution with zero login friction.</p>
+                <p className="text-on-surface-variant text-[11px] sm:text-xs">Lightweight execution with in-memory &amp; LocalStorage caching.</p>
               </div>
             </div>
           </div>

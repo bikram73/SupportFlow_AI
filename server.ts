@@ -403,6 +403,20 @@ app.post("/api/analyze-ticket", async (req, res) => {
     });
   }
 
+  // Length constraints
+  if (cleanSub.length > 300) {
+    return res.status(400).json({
+      error: "Ticket subject cannot exceed 300 characters.",
+      fieldErrors: { subject: "Max 300 characters allowed" }
+    });
+  }
+  if (cleanBody.length > 20000) {
+    return res.status(400).json({
+      error: "Ticket body cannot exceed 20,000 characters.",
+      fieldErrors: { body: "Max 20,000 characters allowed" }
+    });
+  }
+
   const ticketId = id || `ANL-${Math.floor(1000 + Math.random() * 9000)}`;
   const ai = getGeminiClient();
 
@@ -475,6 +489,10 @@ app.post("/api/analyze-batch", async (req, res) => {
 
   if (!Array.isArray(tickets) || tickets.length === 0) {
     return res.status(400).json({ error: "An array of tickets is required." });
+  }
+
+  if (tickets.length > 100) {
+    return res.status(400).json({ error: "Batch size cannot exceed 100 tickets." });
   }
 
   const ai = getGeminiClient();

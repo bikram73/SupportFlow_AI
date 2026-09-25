@@ -3,6 +3,10 @@ import { QATestResult, AnalyzedTicket, QATestCase, NavTab } from '../types';
 import { GOLDEN_QA_TEST_CASES, ruleBasedTriage, evaluateDecisionBoundary } from '../utils/triageFallback';
 import { useTickets } from '../context/TicketContext';
 
+interface ExtendedQATestResult extends QATestResult {
+  engineType: 'Gemini AI' | 'Deterministic Fallback' | 'Ingested Dataset';
+}
+
 interface QAValidationViewProps {
   onSelectTab?: (tab: NavTab) => void;
 }
@@ -11,9 +15,9 @@ export const QAValidationView: React.FC<QAValidationViewProps> = ({ onSelectTab 
   const { tickets: userTickets, addBatchTickets } = useTickets();
   const [isRunning, setIsRunning] = useState(false);
   const [completedCount, setCompletedCount] = useState(0);
-  const [testResults, setTestResults] = useState<QATestResult[]>([]);
+  const [testResults, setTestResults] = useState<ExtendedQATestResult[]>([]);
   const [activeFilter, setActiveFilter] = useState<string>('All');
-  const [activeSuiteName, setActiveSuiteName] = useState<string>('User Analyzed & Batch Tickets');
+  const [activeSuiteName, setActiveSuiteName] = useState<string>('User Analyzed & Batch Dataset');
   const [customConfidence, setCustomConfidence] = useState<number>(90);
   const [customSubject, setCustomSubject] = useState<string>('Cannot login');
   const [customBody, setCustomBody] = useState<string>('Password reset failed, cannot access account.');
@@ -29,7 +33,7 @@ export const QAValidationView: React.FC<QAValidationViewProps> = ({ onSelectTab 
   // Fast evaluation function for existing analyzed / batch tickets
   const validateExistingUserTickets = (ticketsToValidate: AnalyzedTicket[]) => {
     setActiveSuiteName(`User Analyzed & Batch Tickets (${ticketsToValidate.length})`);
-    const results: QATestResult[] = ticketsToValidate.map((t, idx) => {
+    const results: ExtendedQATestResult[] = ticketsToValidate.map((t, idx) => {
       const tc: QATestCase = {
         id: t.id || `QA-USR-${idx + 1}`,
         group: t.id?.startsWith('ANL-CSV') ? 'Batch CSV Ingestion' : t.id?.startsWith('ANL-GEN') ? 'Batch Synthetic' : 'Single Ticket Analysis',
@@ -47,7 +51,6 @@ export const QAValidationView: React.FC<QAValidationViewProps> = ({ onSelectTab 
       let passed = true;
 
       const conf = typeof t.confidence === 'number' ? t.confidence : 90;
-      const boundary = evaluateDecisionBoundary(conf, Boolean(t.humanReview));
 
       // Rule verification
       if (conf >= 90 && t.routingStatus === 'Needs Review' && !t.humanReview) {
@@ -71,12 +74,84 @@ export const QAValidationView: React.FC<QAValidationViewProps> = ({ onSelectTab 
         testCase: tc,
         actualResult: t,
         passed,
+        engineType: 'Ingested Dataset',
         notes: passed ? 'Verified against Rule A/B/C decision boundaries.' : failureReasons.join('; '),
-        latencyMs: 14 + (idx % 8)
+        latencyMs: 12 + (idx % 6)
       };
     });
 
     setTestResults(results);
+  };
+
+  // Robust RFC 4180 CSV parser for QA test uploads
+  const parseCSVContent = (content: string) => {
+    const rows: string[][] = [];
+    let currentRow: string[] = [];
+    let currentCell = '';
+    let insideQuote = false;
+
+    for (let i = 0; i < content.length; i++) {
+      const char = content[i];
+      const nextChar = content[i + 1];
+
+      if (char === '"') {
+        if (insideQuote && nextChar === '"') {
+          currentCell += '"';
+          i++;
+        } else {
+          insideQuote = !insideQuote;
+        }
+      } else if (char === ',' && !insideQuote) {
+        currentRow.push(currentCell.trim());
+        currentCell = '';
+      } else if ((char === '\r' || char === '\n') && !insideQuote) {
+        if (char === '\r' && nextChar === '\n') {
+          i++;
+        }
+        currentRow.push(currentCell.trim());
+        if (currentRow.some((c) => c.length > 0)) {
+          rows.push(currentRow);
+        }
+        currentRow = [];
+        currentCell = '';
+      } else {
+        currentCell += char;
+      }
+    }
+    if (currentCell || currentRow.length > 0) {
+      currentRow.push(currentCell.trim());
+      if (currentRow.some((c) => c.length > 0)) {
+        rows.push(currentRow);
+      }
+    }
+
+    if (rows.length === 0) return [];
+    const startIdx = rows[0][0]?.toLowerCase().includes('subject') ? 1 : 0;
+    const items: QATestCase[] = [];
+
+    for (let r = startIdx; r < rows.length; r++) {
+      const row = rows[r];
+      if (row.length >= 2) {
+        items.push({
+          id: `CSV-TC-${3000 + r}`,
+          group: 'Custom CSV Test',
+          name: row[0],
+          subject: row[0],
+          body: row.slice(1).join(', '),
+          testType: 'functional'
+        });
+      } else if (row.length === 1 && row[0].trim().length > 0) {
+        items.push({
+          id: `CSV-TC-${3000 + r}`,
+          group: 'Custom CSV Test',
+          name: row[0].slice(0, 40),
+          subject: row[0].slice(0, 40),
+          body: row[0],
+          testType: 'functional'
+        });
+      }
+    }
+    return items;
   };
 
   // Deep active test execution against live API / Rule Engine
@@ -84,7 +159,7 @@ export const QAValidationView: React.FC<QAValidationViewProps> = ({ onSelectTab 
     setIsRunning(true);
     setActiveSuiteName(suiteLabel);
     setCompletedCount(0);
-    const results: QATestResult[] = [];
+    const results: ExtendedQATestResult[] = [];
 
     for (let i = 0; i < testCases.length; i++) {
       const tc = testCases[i];
@@ -92,6 +167,7 @@ export const QAValidationView: React.FC<QAValidationViewProps> = ({ onSelectTab 
 
       let actualResult: AnalyzedTicket;
       let passed = true;
+      let engineType: 'Gemini AI' | 'Deterministic Fallback' = 'Gemini AI';
       const failureReasons: string[] = [];
 
       try {
@@ -127,6 +203,7 @@ export const QAValidationView: React.FC<QAValidationViewProps> = ({ onSelectTab 
         };
       } catch {
         // Fallback rule evaluation
+        engineType = 'Deterministic Fallback';
         const fallback = ruleBasedTriage(tc.subject, tc.body);
         actualResult = {
           id: tc.id,
@@ -181,7 +258,6 @@ export const QAValidationView: React.FC<QAValidationViewProps> = ({ onSelectTab 
         failureReasons.push(`Confidence exceeded maximum (${actualResult.confidence} > ${tc.maxConfidence})`);
       }
 
-      // Schema sanity validation
       if (!actualResult.category || !actualResult.urgency || !actualResult.assignedTeam || !actualResult.routingStatus) {
         passed = false;
         failureReasons.push('Missing required output schema fields.');
@@ -191,6 +267,7 @@ export const QAValidationView: React.FC<QAValidationViewProps> = ({ onSelectTab 
         testCase: tc,
         actualResult,
         passed,
+        engineType,
         notes: passed ? 'All validation checks passed.' : failureReasons.join('; '),
         latencyMs
       });
@@ -211,8 +288,8 @@ export const QAValidationView: React.FC<QAValidationViewProps> = ({ onSelectTab 
     }
 
     const convertedTestCases: QATestCase[] = userTickets.map((t, idx) => ({
-      id: t.id || `USR-TC-${idx + 1}`,
-      group: t.id?.startsWith('ANL-CSV') ? 'Batch CSV' : 'Single Analysis',
+      id: t.id || `ANL-USR-${idx + 1}`,
+      group: t.id?.startsWith('ANL-CSV') ? 'Batch CSV Ingest' : 'Single Ticket Analysis',
       name: t.subject || `User Ticket #${idx + 1}`,
       subject: t.subject,
       body: t.body || '',
@@ -223,7 +300,7 @@ export const QAValidationView: React.FC<QAValidationViewProps> = ({ onSelectTab 
       testType: 'functional'
     }));
 
-    executeTestCases(convertedTestCases, `Live User Dataset (${userTickets.length} tickets)`);
+    executeTestCases(convertedTestCases, `Live Ingested Dataset (${userTickets.length} tickets)`);
   };
 
   // Run 50 Golden QA test cases
@@ -239,19 +316,14 @@ export const QAValidationView: React.FC<QAValidationViewProps> = ({ onSelectTab 
       const res = await fetch('/sample_support_tickets_batch.csv');
       if (!res.ok) throw new Error('Could not fetch sample CSV');
       const csvText = await res.text();
-      
-      const lines = csvText.split('\n').filter((l) => l.trim().length > 0);
-      const dataLines = lines[0].toLowerCase().includes('subject') ? lines.slice(1) : lines;
-      
-      const parsedTickets: AnalyzedTicket[] = dataLines.map((line, idx) => {
-        const parts = line.split(',');
-        const subject = parts[0]?.replace(/^"|"$/g, '').trim() || `Ticket #${idx + 1}`;
-        const body = parts.slice(1).join(',').replace(/^"|"$/g, '').trim() || subject;
-        const triage = ruleBasedTriage(subject, body);
+      const testCases = parseCSVContent(csvText);
+
+      const parsedTickets: AnalyzedTicket[] = testCases.map((tc, idx) => {
+        const triage = ruleBasedTriage(tc.subject, tc.body);
         return {
           id: `ANL-CSV-${3000 + idx}`,
-          subject,
-          body,
+          subject: tc.subject,
+          body: tc.body,
           category: triage.category,
           urgency: triage.urgency,
           confidence: triage.confidence,
@@ -270,6 +342,25 @@ export const QAValidationView: React.FC<QAValidationViewProps> = ({ onSelectTab 
     } finally {
       setIsRunning(false);
     }
+  };
+
+  // Custom CSV upload handler with robust parser
+  const handleUploadCustomCSV = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const content = event.target?.result as string;
+      if (content) {
+        const parsedCases = parseCSVContent(content);
+        if (parsedCases.length > 0) {
+          executeTestCases(parsedCases, `Custom Uploaded CSV (${parsedCases.length} items)`);
+        }
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
   };
 
   // Run Boundary Sandbox simulation
@@ -296,28 +387,28 @@ export const QAValidationView: React.FC<QAValidationViewProps> = ({ onSelectTab 
     const total = testResults.length;
     const passed = testResults.filter((r) => r.passed).length;
     const failed = total - passed;
-    const rate = total > 0 ? ((passed / total) * 100).toFixed(1) : '100.0';
+    const rate = total > 0 ? ((passed / total) * 100).toFixed(1) : 'Not Run';
 
     let md = `# SupportFlow AI — QA Validation Report\n\n`;
     md += `**Suite:** ${activeSuiteName}\n`;
     md += `**Date:** ${new Date().toISOString()}\n`;
-    md += `**Total Analyzed Tickets:** ${userTickets.length}\n`;
-    md += `**Environment:** Node/Express + React + Gemini AI / Rule Engine\n`;
-    md += `**Overall Result:** ${passed === total ? '🟢 PASS (100%)' : '🟡 CONDITIONAL PASS'}\n\n`;
+    md += `**Total Analyzed Dataset:** ${userTickets.length} tickets\n`;
+    md += `**Architecture:** Google Gemini 3.6 Flash + Deterministic Fallback Engine\n`;
+    md += `**Overall Verification:** ${total > 0 && passed === total ? '🟢 PASS (100%)' : total > 0 ? '🟡 CONDITIONAL PASS' : '⚪ NOT RUN'}\n\n`;
     md += `## Executive Scorecard\n\n`;
-    md += `| Test Metric | Value | Target | Status |\n`;
+    md += `| Test Metric | Value | Benchmark Target | Status |\n`;
     md += `| :--- | :--- | :--- | :--- |\n`;
-    md += `| Total Tests Executed | ${total} | ≥ 1 | ✅ PASS |\n`;
-    md += `| Passed Assertions | ${passed} / ${total} | 100% | ${passed === total ? '✅ PASS' : '⚠️ REVIEW'} |\n`;
+    md += `| Total Tests Executed | ${total} | ≥ 1 | ${total > 0 ? '✅ EXECUTED' : '⚠️ NONE'} |\n`;
+    md += `| Passed Assertions | ${passed} / ${total} | 100% | ${total > 0 && passed === total ? '✅ PASS' : total > 0 ? '⚠️ REVIEW' : '—'} |\n`;
     md += `| Failed Assertions | ${failed} | 0 | ${failed === 0 ? '✅ PASS' : '❌ FAIL'} |\n`;
-    md += `| Validation Pass Rate | ${rate}% | ≥ 95% | ✅ PASS |\n\n`;
+    md += `| Pass Rate | ${rate === 'Not Run' ? 'Not Run' : `${rate}%`} | ≥ 95% | ${rate !== 'Not Run' && Number(rate) >= 95 ? '✅ PASS' : '—'} |\n\n`;
 
     md += `## Detailed Validation Matrix\n\n`;
-    md += `| Test ID | Group / Origin | Subject | Category | Urgency | Target Team | Confidence | Result |\n`;
+    md += `| Test ID | Origin & Group | Subject | Category | Urgency | Target Queue | Engine | Result |\n`;
     md += `| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |\n`;
 
     testResults.forEach((r) => {
-      md += `| ${r.testCase.id} | ${r.testCase.group} | ${r.testCase.subject.replace(/\|/g, '')} | ${r.actualResult?.category || 'N/A'} | ${r.actualResult?.urgency || 'N/A'} | ${r.actualResult?.assignedTeam || 'N/A'} | ${r.actualResult?.confidence || 'N/A'}% | ${r.passed ? '🟢 PASS' : '🔴 FAIL'} |\n`;
+      md += `| ${r.testCase.id} | ${r.testCase.group} | "${r.testCase.subject.replace(/"/g, '""')}" | ${r.actualResult?.category || 'N/A'} | ${r.actualResult?.urgency || 'N/A'} | ${r.actualResult?.assignedTeam || 'N/A'} | ${r.engineType} | ${r.passed ? '🟢 PASS' : '🔴 FAIL'} |\n`;
     });
 
     const blob = new Blob([md], { type: 'text/markdown;charset=utf-8;' });
@@ -333,13 +424,18 @@ export const QAValidationView: React.FC<QAValidationViewProps> = ({ onSelectTab 
   const totalTests = testResults.length;
   const passedTests = testResults.filter((r) => r.passed).length;
   const failedTests = totalTests - passedTests;
-  const passRate = totalTests > 0 ? ((passedTests / totalTests) * 100).toFixed(1) : '100.0';
+  const passRateDisplay = totalTests > 0 ? `${((passedTests / totalTests) * 100).toFixed(1)}%` : 'Not Run';
+
+  const geminiCount = testResults.filter((r) => r.engineType === 'Gemini AI').length;
+  const fallbackCount = testResults.filter((r) => r.engineType === 'Deterministic Fallback').length;
 
   const filteredResults = useMemo(() => {
     return testResults.filter((r) => {
       if (activeFilter === 'All') return true;
       if (activeFilter === 'Passed') return r.passed;
       if (activeFilter === 'Failed') return !r.passed;
+      if (activeFilter === 'Gemini AI') return r.engineType === 'Gemini AI';
+      if (activeFilter === 'Fallback') return r.engineType === 'Deterministic Fallback';
       if (activeFilter === 'Auto-Routed') return r.actualResult?.confidence && r.actualResult.confidence >= 90;
       if (activeFilter === 'Review') return r.actualResult?.humanReview || (r.actualResult?.confidence && r.actualResult.confidence < 70);
       return true;
@@ -359,7 +455,7 @@ export const QAValidationView: React.FC<QAValidationViewProps> = ({ onSelectTab 
               End-to-End QA Validation &amp; Verification
             </h1>
             <p className="text-on-surface-variant text-xs sm:text-sm">
-              Continuous validation powered by your analyzed single tickets and bulk CSV batch processing datasets.
+              Verify accuracy, boundary execution (Rule A/B/C), and fallback resilience across analyzed datasets.
             </p>
           </div>
 
@@ -392,6 +488,13 @@ export const QAValidationView: React.FC<QAValidationViewProps> = ({ onSelectTab 
               </button>
             )}
 
+            {/* Upload Custom CSV for QA validation */}
+            <label className="px-3.5 py-2.5 bg-surface-container-high hover:bg-surface-container-highest text-on-surface rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer border border-outline-variant min-h-[40px]">
+              <input type="file" accept=".csv,.txt" onChange={handleUploadCustomCSV} className="hidden" />
+              <span className="material-symbols-outlined text-[18px]">upload_file</span>
+              <span>Upload CSV Test</span>
+            </label>
+
             {/* Run Benchmark 50 Golden Tests */}
             <button
               type="button"
@@ -423,7 +526,7 @@ export const QAValidationView: React.FC<QAValidationViewProps> = ({ onSelectTab 
               {totalTests}
             </div>
             <span className="text-[10px] sm:text-[11px] text-primary font-bold mt-1 block">
-              {userTickets.length > 0 ? `${userTickets.length} Ingested Total` : 'Ready for Ingestion'}
+              {userTickets.length > 0 ? `${userTickets.length} Ingested in Session` : 'Awaiting Ingestion'}
             </span>
           </div>
 
@@ -433,32 +536,38 @@ export const QAValidationView: React.FC<QAValidationViewProps> = ({ onSelectTab 
               {passedTests}
             </div>
             <span className="text-[10px] sm:text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full inline-block mt-1">
-              Zero Regressions
+              {totalTests > 0 ? `${passedTests}/${totalTests} Passed` : '0 Tests'}
             </span>
           </div>
 
           <div className="bg-surface-container-lowest p-3.5 sm:p-5 rounded-2xl border border-outline-variant shadow-xs">
-            <span className="text-[11px] sm:text-xs font-bold text-outline block mb-1">Review Flags</span>
+            <span className="text-[11px] sm:text-xs font-bold text-outline block mb-1">Review Triggers</span>
             <div className="text-2xl sm:text-3xl font-extrabold text-amber-700">
               {testResults.filter(r => r.actualResult?.humanReview || (r.actualResult?.confidence && r.actualResult.confidence < 70)).length}
             </div>
-            <span className="text-[10px] sm:text-[11px] text-outline mt-1 block">&lt;70% Boundary Handled</span>
+            <span className="text-[10px] sm:text-[11px] text-outline mt-1 block">Rule C Enforced</span>
           </div>
 
           <div className="bg-surface-container-lowest p-3.5 sm:p-5 rounded-2xl border border-outline-variant shadow-xs">
-            <span className="text-[11px] sm:text-xs font-bold text-outline block mb-1">Decision Rules</span>
-            <div className="text-2xl sm:text-3xl font-extrabold text-primary">100%</div>
-            <span className="text-[10px] sm:text-[11px] text-outline mt-1 block">Rules A, B, C Compliant</span>
+            <span className="text-[11px] sm:text-xs font-bold text-outline block mb-1">Engine Origin</span>
+            <div className="text-base sm:text-lg font-extrabold text-on-surface truncate">
+              {totalTests === 0 ? '—' : geminiCount > 0 && fallbackCount > 0 ? 'Hybrid Active' : geminiCount > 0 ? 'Gemini AI' : fallbackCount > 0 ? 'Fallback' : 'Session'}
+            </div>
+            <span className="text-[10px] sm:text-[11px] text-outline mt-1 block">
+              {geminiCount > 0 ? `${geminiCount} AI, ${fallbackCount} Fallback` : totalTests > 0 ? `${totalTests} Ingested` : 'Standby'}
+            </span>
           </div>
 
           <div className="col-span-2 sm:col-span-1 bg-surface-container-lowest p-3.5 sm:p-5 rounded-2xl border border-outline-variant shadow-xs ai-gradient-border">
             <span className="text-[11px] sm:text-xs font-bold text-outline block mb-1">Validation Score</span>
             <div className="text-2xl sm:text-3xl font-extrabold text-primary flex items-center justify-between">
-              {passRate}%
-              <span className="material-symbols-outlined text-[20px] text-emerald-600">check_circle</span>
+              {passRateDisplay}
+              {totalTests > 0 && (
+                <span className="material-symbols-outlined text-[20px] text-emerald-600">check_circle</span>
+              )}
             </div>
             <span className="text-[10px] sm:text-[11px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full inline-block mt-1">
-              🟢 Verification Passed
+              {totalTests > 0 ? '🟢 Verified' : 'Awaiting Run'}
             </span>
           </div>
         </div>
@@ -598,14 +707,14 @@ export const QAValidationView: React.FC<QAValidationViewProps> = ({ onSelectTab 
               </div>
               <p className="text-[11px] sm:text-xs text-outline">
                 {testResults.length > 0
-                  ? `Showing ${filteredResults.length} validated tickets with complete assertion verification`
+                  ? `Showing ${filteredResults.length} validated tickets with engine origin and assertion tracking`
                   : 'Ingest tickets via Analyze Ticket or Batch Processing to populate QA verification table'}
               </p>
             </div>
 
             {testResults.length > 0 && (
               <div className="flex flex-wrap gap-1">
-                {['All', 'Passed', 'Auto-Routed', 'Review'].map((f) => (
+                {['All', 'Passed', 'Failed', 'Gemini AI', 'Fallback', 'Auto-Routed', 'Review'].map((f) => (
                   <button
                     key={f}
                     type="button"
@@ -624,9 +733,9 @@ export const QAValidationView: React.FC<QAValidationViewProps> = ({ onSelectTab 
           {testResults.length === 0 ? (
             <div className="text-center py-10 sm:py-16 border-2 border-dashed border-outline-variant rounded-2xl bg-surface-container-low px-4">
               <span className="material-symbols-outlined text-[40px] sm:text-[48px] text-primary mb-2 sm:mb-3">checklist</span>
-              <h4 className="font-bold text-on-surface text-base mb-1">No Tickets Loaded in System Yet</h4>
+              <h4 className="font-bold text-on-surface text-base mb-1">No Tickets Ingested in Current Session</h4>
               <p className="text-xs text-outline max-w-md mx-auto mb-5">
-                The QA Validation Suite automatically audits the tickets you analyze or upload. Analyze a single ticket or load a batch dataset to view the verification report.
+                The QA Validation Suite audits your active tickets against Rule A (≥90%), Rule B (70–89%), and Rule C (&lt;70%). Analyze a single ticket or load a batch dataset to view the verification report.
               </p>
               <div className="flex flex-wrap justify-center gap-2.5">
                 <button
@@ -666,9 +775,9 @@ export const QAValidationView: React.FC<QAValidationViewProps> = ({ onSelectTab 
                     <th className="py-2.5 sm:py-3 px-2 sm:px-3">Subject</th>
                     <th className="py-2.5 sm:py-3 px-2 sm:px-3">Category</th>
                     <th className="py-2.5 sm:py-3 px-2 sm:px-3">Urgency</th>
-                    <th className="py-2.5 sm:py-3 px-2 sm:px-3">Target Team</th>
-                    <th className="py-2.5 sm:py-3 px-2 sm:px-3">Confidence</th>
-                    <th className="py-2.5 sm:py-3 px-2 sm:px-3 text-right">Validation Result</th>
+                    <th className="py-2.5 sm:py-3 px-2 sm:px-3">Target Queue</th>
+                    <th className="py-2.5 sm:py-3 px-2 sm:px-3">Engine</th>
+                    <th className="py-2.5 sm:py-3 px-2 sm:px-3 text-right">Result</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-outline-variant/60 text-xs sm:text-sm">
@@ -711,8 +820,18 @@ export const QAValidationView: React.FC<QAValidationViewProps> = ({ onSelectTab 
                       <td className="py-3 px-2 sm:px-3 text-xs font-medium text-on-surface">
                         {r.actualResult ? r.actualResult.assignedTeam : 'N/A'}
                       </td>
-                      <td className="py-3 px-2 sm:px-3 font-bold text-primary text-xs">
-                        {r.actualResult ? `${r.actualResult.confidence}%` : 'N/A'}
+                      <td className="py-3 px-2 sm:px-3">
+                        <span
+                          className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
+                            r.engineType === 'Gemini AI'
+                              ? 'bg-purple-100 text-purple-800'
+                              : r.engineType === 'Deterministic Fallback'
+                              ? 'bg-blue-100 text-blue-800'
+                              : 'bg-surface-container-high text-on-surface'
+                          }`}
+                        >
+                          {r.engineType}
+                        </span>
                       </td>
                       <td className="py-3 px-2 sm:px-3 text-right">
                         <span

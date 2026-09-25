@@ -41,10 +41,10 @@ Automatically analyzes incoming customer inquiries, extracts semantic intent, as
 <h2 id="features">✨ Features</h2>
 
 ### 🎯 1. Real-Time Single Ticket Triage
-* **Semantic Category Extraction**: Classifies tickets into standard taxonomy types including `Technical Issue`, `Billing`, `Refund`, `Account Access`, `Password Reset`, `Bug Report`, `Feature Request`, `Security Concern`, `Sales Inquiry`, `Subscription`, `Performance Issue`, and `General Question`.
+* **Semantic Category Extraction**: Classifies tickets into 12 standard taxonomy types: `Technical Issue`, `Billing`, `Refund`, `Account Access`, `Password Reset`, `Bug Report`, `Feature Request`, `Security Concern`, `Sales Inquiry`, `Subscription`, `General Question`, and `Other`.
 * **Urgency & Severity Detection**: Evaluates severity on a 4-tier matrix: `Critical`, `High`, `Medium`, and `Low`.
 * **Target Team Routing**: Maps tickets directly to specialized teams such as `Infrastructure Team`, `Engineering`, `Billing Team`, `Account Team`, `Security Team`, `Sales Team`, `Customer Success`, or `General Support`.
-* **Step-by-Step AI Reasoning**: Generates an audit-ready 1–3 sentence rationale detailing why a specific department and priority was assigned.
+* **Step-by-Step AI Reasoning**: Generates an audit-ready 1–2 sentence rationale detailing why a specific department and priority was assigned.
 
 ### 🛡️ 2. Automated Confidence Scoring & Human-in-the-Loop Flags
 * **Granular Confidence Rating (0–100%)**: Quantifies the certainty of classification.
@@ -58,13 +58,13 @@ Automatically analyzes incoming customer inquiries, extracts semantic intent, as
 * **Data Export**: Export processed ticket batches and classification decisions to CSV or JSON.
 
 ### 📊 4. Interactive Operations Dashboard
-* **Real-Time KPI Metrics**: Live indicators tracking Total Processed, Auto-Routing Rate (~94%), Average Confidence (~91%), and SLA compliance.
+* **Real-Time KPI Metrics**: Live indicators tracking Total Processed, Auto-Routing Rate, Average Confidence, and SLA distribution calculated dynamically from the active session dataset.
 * **Category Breakdown Distribution**: Visual breakdown of incoming ticket volume across core departments.
-* **Queue Health & Agent Allocation**: View current backlog distribution, active agents, and average resolution time per team.
+* **Queue Health & Agent Allocation**: View current backlog distribution, active agents, and demo SLA targets per team.
 
-### 🔄 5. High-Availability Dual-Layer Architecture
+### 🔄 5. Dual-Layer Architecture with Deterministic Fallback
 * **Serverless Backend Execution**: Express API integrated with Vite middleware for dev and Netlify Serverless Functions for cloud deployment.
-* **Zero-Downtime Rule-Based Fallback**: Built-in deterministic pattern matcher ensures classification, urgency assignment, and routing continue working without interruption even if network connectivity or external API keys are unavailable.
+* **Resilient Rule-Based Fallback Engine**: Built-in deterministic pattern matcher ensures classification, urgency assignment, and routing continue functioning with rule-based heuristics if external AI models are unreachable.
 
 ---
 
@@ -227,8 +227,8 @@ All endpoints accept and return `application/json`.
 ```json
 {
   "tickets": [
-    { "id": "TK-101", "subject": "Cannot login", "body": "Password reset email never arrives." },
-    { "id": "TK-102", "subject": "Charged twice", "body": "I was billed double for July subscription." }
+    { "id": "ANL-1001", "subject": "Cannot login", "body": "Password reset email never arrives." },
+    { "id": "ANL-1002", "subject": "Charged twice", "body": "I was billed double for July subscription." }
   ]
 }
 ```
@@ -238,7 +238,7 @@ All endpoints accept and return `application/json`.
 {
   "tickets": [
     {
-      "id": "TK-101",
+      "id": "ANL-1001",
       "subject": "Cannot login",
       "body": "Password reset email never arrives.",
       "category": "Account Access",
@@ -246,17 +246,19 @@ All endpoints accept and return `application/json`.
       "confidence": 95,
       "assignedTeam": "Account Team",
       "humanReview": false,
+      "routingStatus": "Auto-Routed",
       "reason": "Customer is blocked by authentication and password reset delivery issue."
     },
     {
-      "id": "TK-102",
+      "id": "ANL-1002",
       "subject": "Charged twice",
       "body": "I was billed double for July subscription.",
-      "category": "Billing",
+      "category": "Refund",
       "urgency": "Medium",
       "confidence": 98,
       "assignedTeam": "Billing Team",
       "humanReview": false,
+      "routingStatus": "Auto-Routed",
       "reason": "Duplicate charge inquiry requiring invoice review and refund processing."
     }
   ]
@@ -285,8 +287,8 @@ All endpoints accept and return `application/json`.
 | **Multi-Intent Tickets** | If a ticket combines multiple distinct issues (e.g., *"My invoice is wrong AND my mobile app crashes"*), single-category classification can prioritize only one intent. | System flags `humanReview: true` when multiple intents are detected so human supervisors can split the ticket. |
 | **Extremely Short / Vague Submissions** | Tickets with minimal context (e.g., *"Help please"*, *"It is broken"*) lack semantic depth for high confidence. | Confidence score drops below `70%`, triggering the **Needs Review** state for agent clarification. |
 | **Unseen Jargon & Proprietary IDs** | Specialized internal error codes (e.g., *"Kernel fault 0xDEADBEEF in pod delta-4"*) may not match generic knowledge models. | System utilizes urgency heuristics (e.g. "fault", "outage") to route to Infrastructure / Engineering while maintaining review flags. |
-| **API Rate Limiting / Offline Mode** | During network interruptions or cloud provider quota limits, external AI models may fail. | The built-in client and server deterministic fallback immediately intercepts calls to guarantee 100% operational uptime. |
-| **Token Length Limits** | Very large stack traces (>15,000 words) may get truncated before analysis. | Pre-processing strips redundant stack repetitions to retain the essential error description. |
+| **API Rate Limiting / Offline Mode** | During network interruptions or cloud provider quota limits, external AI models may fail. | The built-in client and server deterministic fallback engine provides uninterrupted rule-based triage when Gemini is unavailable. |
+| **Input Length Limits** | Very large inputs (>300 chars for subject, >20,000 chars for body) or batches (>100 tickets) are rejected. | Built-in request validation returns structured 400 Bad Request error responses before calling AI services. |
 
 ---
 
