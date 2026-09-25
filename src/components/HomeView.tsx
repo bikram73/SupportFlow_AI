@@ -258,7 +258,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onSelectTab, onTrySample }) 
               <h5 className="font-bold mb-6 text-white">Resources</h5>
               <ul className="space-y-4 text-surface-variant text-sm">
                 <li><a onClick={() => onSelectTab('about')} className="hover:text-white transition-colors cursor-pointer" href="#about">Documentation</a></li>
-                <li><a onClick={() => onSelectTab('about')} className="hover:text-white transition-colors flex items-center gap-2 cursor-pointer" href="#github">GitHub <span className="material-symbols-outlined text-[16px]">open_in_new</span></a></li>
+                <li><a href="https://github.com/bikram73/SupportFlow_AI" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors flex items-center gap-2 cursor-pointer">GitHub <span className="material-symbols-outlined text-[16px]">open_in_new</span></a></li>
                 <li><a onClick={() => onSelectTab('about')} className="hover:text-white transition-colors cursor-pointer" href="#api">API Reference</a></li>
                 <li><a onClick={() => onSelectTab('about')} className="hover:text-white transition-colors cursor-pointer" href="#forum">Community Forum</a></li>
               </ul>

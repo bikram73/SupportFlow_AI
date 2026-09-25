@@ -1,5 +1,8 @@
 # Deploying SupportFlow AI on Netlify
 
+* **Live Deployment URL:** [https://supportflow-ai.netlify.app/](https://supportflow-ai.netlify.app/)
+* **GitHub Repository:** [https://github.com/bikram73/SupportFlow_AI](https://github.com/bikram73/SupportFlow_AI)
+
 This project is fully configured for seamless deployment on **Netlify**, including static frontend hosting and Netlify Serverless Functions for the backend Gemini AI API endpoints.
 
 ---

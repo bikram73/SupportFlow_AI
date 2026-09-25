@@ -6,11 +6,17 @@
 [![React](https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.0-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Express](https://img.shields.io/badge/Express-4.21-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
-[![Vite](https://img.shields.io/badge/Vite-6.2-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Netlify](https://img.shields.io/badge/Deployed_on-Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)](https://supportflow-ai.netlify.app/)
+[![GitHub](https://img.shields.io/badge/GitHub-bikram73%2FSupportFlow__AI-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/bikram73/SupportFlow_AI)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](./LICENSE)
 
 **An enterprise-grade customer support triage and decision orchestration platform.**  
 Automatically analyzes incoming customer inquiries, extracts semantic intent, assigns urgency levels, computes confidence scores, and routes tickets to appropriate departmental queues with automated human-in-the-loop safeguards.
+
+<br />
+
+🔗 **Live Application URL:** [https://supportflow-ai.netlify.app/](https://supportflow-ai.netlify.app/)  
+📂 **Source Code Repository:** [https://github.com/bikram73/SupportFlow_AI](https://github.com/bikram73/SupportFlow_AI)
 
 </div>
 
@@ -144,8 +150,8 @@ Ensure you have the following installed on your machine:
 
 ### 🛠️ 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/supportflow-ai.git
-cd supportflow-ai
+git clone https://github.com/bikram73/SupportFlow_AI.git
+cd SupportFlow_AI
 ```
 
 ### 📦 2. Install Dependencies
