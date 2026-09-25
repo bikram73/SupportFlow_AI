@@ -18,6 +18,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onSelectTab }) => 
       team: 'Infrastructure Team',
       confidence: 99,
       humanReview: false,
+      routingStatus: 'Auto-Routed',
       status: 'Auto Routed',
       timestamp: '2 mins ago'
     },
@@ -29,6 +30,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onSelectTab }) => 
       team: 'Billing Team',
       confidence: 98,
       humanReview: false,
+      routingStatus: 'Auto-Routed',
       status: 'Auto Routed',
       timestamp: '5 mins ago'
     },
@@ -40,6 +42,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onSelectTab }) => 
       team: 'Engineering',
       confidence: 93,
       humanReview: false,
+      routingStatus: 'Auto-Routed',
       status: 'Auto Routed',
       timestamp: '10 mins ago'
     },
@@ -51,6 +54,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onSelectTab }) => 
       team: 'Account Team',
       confidence: 68,
       humanReview: true,
+      routingStatus: 'Needs Review',
       status: 'Needs Review',
       timestamp: '15 mins ago'
     },
@@ -62,6 +66,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onSelectTab }) => 
       team: 'Product Team',
       confidence: 96,
       humanReview: false,
+      routingStatus: 'Auto-Routed',
       status: 'Auto Routed',
       timestamp: '22 mins ago'
     },
@@ -73,6 +78,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onSelectTab }) => 
       team: 'General Support',
       confidence: 58,
       humanReview: true,
+      routingStatus: 'Needs Review',
       status: 'Needs Review',
       timestamp: '30 mins ago'
     }
@@ -87,18 +93,18 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onSelectTab }) => 
 
   return (
     <div id="dashboard-view" className="w-full">
-      <div className="max-w-container-max-width mx-auto px-margin-desktop py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Sidebar Navigation */}
-          <aside className="lg:col-span-3 bg-surface-container-lowest p-6 rounded-3xl border border-outline-variant shadow-sm h-fit space-y-6">
+      <div className="max-w-container-max-width mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8">
+          {/* Sidebar Navigation (Hidden on small mobile if preferred, accessible via top/bottom nav) */}
+          <aside className="lg:col-span-3 bg-surface-container-lowest p-4 sm:p-6 rounded-3xl border border-outline-variant shadow-xs h-fit space-y-4 sm:space-y-6">
             {/* User Profile Info */}
             <div className="flex items-center gap-3 p-3 bg-surface-container-low rounded-2xl">
-              <div className="w-10 h-10 bg-primary/10 text-primary rounded-xl flex items-center justify-center font-bold">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 bg-primary/10 text-primary rounded-xl flex items-center justify-center font-bold text-sm">
                 SF
               </div>
               <div>
-                <h4 className="font-bold text-on-surface text-sm">Support Operations</h4>
-                <span className="text-xs text-outline">AI Decision Engine</span>
+                <h4 className="font-bold text-on-surface text-xs sm:text-sm">Support Operations</h4>
+                <span className="text-[11px] text-outline">AI Decision Engine</span>
               </div>
             </div>
 
@@ -107,7 +113,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onSelectTab }) => 
               <button
                 type="button"
                 onClick={() => onSelectTab('home')}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors cursor-pointer"
+                className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors cursor-pointer"
               >
                 <span className="material-symbols-outlined text-[20px]">home</span>
                 Home Overview
@@ -116,7 +122,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onSelectTab }) => 
               <button
                 type="button"
                 onClick={() => onSelectTab('analyze')}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors cursor-pointer"
+                className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors cursor-pointer"
               >
                 <span className="material-symbols-outlined text-[20px]">analytics</span>
                 Single Ticket Analysis
@@ -125,7 +131,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onSelectTab }) => 
               <button
                 type="button"
                 onClick={() => onSelectTab('batch')}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors cursor-pointer"
+                className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors cursor-pointer"
               >
                 <span className="material-symbols-outlined text-[20px]">dataset</span>
                 Batch Processing
@@ -134,7 +140,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onSelectTab }) => 
               <button
                 type="button"
                 onClick={() => onSelectTab('dashboard')}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold bg-primary-container text-on-primary-container cursor-pointer"
+                className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-primary text-on-primary cursor-pointer shadow-xs"
               >
                 <span className="material-symbols-outlined text-[20px]">dashboard</span>
                 Triage Dashboard
@@ -142,8 +148,17 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onSelectTab }) => 
 
               <button
                 type="button"
+                onClick={() => onSelectTab('qa')}
+                className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[20px]">verified</span>
+                QA &amp; Verification Suite
+              </button>
+
+              <button
+                type="button"
                 onClick={() => onSelectTab('about')}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors cursor-pointer"
+                className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors cursor-pointer"
               >
                 <span className="material-symbols-outlined text-[20px]">info</span>
                 Decision Boundary Specs
@@ -151,41 +166,41 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onSelectTab }) => 
             </nav>
 
             {/* AI Insights Banner */}
-            <div className="p-4 bg-gradient-to-br from-primary/10 to-tertiary/10 rounded-2xl border border-primary/20">
-              <span className="material-symbols-outlined text-primary mb-2">auto_awesome</span>
-              <h5 className="font-bold text-on-surface text-sm mb-1">Confidence Thresholds</h5>
-              <p className="text-xs text-on-surface-variant mb-3">
+            <div className="p-3.5 sm:p-4 bg-gradient-to-br from-primary/10 to-tertiary/10 rounded-2xl border border-primary/20">
+              <span className="material-symbols-outlined text-primary mb-1.5 text-[20px]">auto_awesome</span>
+              <h5 className="font-bold text-on-surface text-xs sm:text-sm mb-1">Confidence Thresholds</h5>
+              <p className="text-[11px] text-on-surface-variant mb-2.5 leading-relaxed">
                 &ge;90% Auto-routed, 70-89% Recommended, &lt;70% Human Review Flag.
               </p>
               <button
                 type="button"
-                onClick={() => onSelectTab('about')}
-                className="text-xs font-bold text-primary hover:underline flex items-center gap-1 cursor-pointer"
+                onClick={() => onSelectTab('qa')}
+                className="text-[11px] font-bold text-primary hover:underline flex items-center gap-1 cursor-pointer"
               >
-                View Rules Matrix <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+                Run Boundary Audit <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
               </button>
             </div>
           </aside>
 
           {/* Main Dashboard Workspace */}
-          <main className="lg:col-span-9 space-y-8">
+          <main className="lg:col-span-9 space-y-6 sm:space-y-8">
             {/* Top Bar Controls */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-surface-container-lowest p-6 rounded-3xl border border-outline-variant shadow-sm">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 bg-surface-container-lowest p-4 sm:p-6 rounded-3xl border border-outline-variant shadow-xs">
               <div>
-                <h1 className="font-section-title text-section-title text-on-surface">Support Ticket Analytics</h1>
-                <p className="text-xs text-on-surface-variant">Real-time triage metrics, confidence ratings, and department queue allocations.</p>
+                <h1 className="text-xl sm:text-2xl font-extrabold text-on-surface tracking-tight">Support Ticket Analytics</h1>
+                <p className="text-xs text-on-surface-variant">Real-time triage metrics, confidence ratings, and queue allocations.</p>
               </div>
 
-              <div className="flex flex-wrap items-center gap-3">
-                <div className="relative">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                <div className="relative flex-1 sm:flex-none">
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search events..."
-                    className="pl-9 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-xl text-xs text-on-surface focus:outline-none focus:border-primary w-40 sm:w-48"
+                    className="pl-8 pr-3 py-1.5 sm:py-2 bg-surface-container-low border border-outline-variant rounded-xl text-xs text-on-surface focus:outline-none focus:border-primary w-full sm:w-44"
                   />
-                  <span className="material-symbols-outlined absolute left-2.5 top-2.5 text-outline text-[18px]">
+                  <span className="material-symbols-outlined absolute left-2.5 top-2 text-outline text-[16px]">
                     search
                   </span>
                 </div>
@@ -194,7 +209,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onSelectTab }) => 
                   <button
                     type="button"
                     onClick={() => setTimeRange('today')}
-                    className={`px-3 py-1 rounded-lg text-xs font-bold cursor-pointer transition-colors ${
+                    className={`px-2.5 sm:px-3 py-1 rounded-lg text-xs font-bold cursor-pointer transition-colors ${
                       timeRange === 'today' ? 'bg-primary text-on-primary' : 'text-on-surface-variant hover:text-on-surface'
                     }`}
                   >
@@ -203,7 +218,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onSelectTab }) => 
                   <button
                     type="button"
                     onClick={() => setTimeRange('week')}
-                    className={`px-3 py-1 rounded-lg text-xs font-bold cursor-pointer transition-colors ${
+                    className={`px-2.5 sm:px-3 py-1 rounded-lg text-xs font-bold cursor-pointer transition-colors ${
                       timeRange === 'week' ? 'bg-primary text-on-primary' : 'text-on-surface-variant hover:text-on-surface'
                     }`}
                   >
@@ -212,7 +227,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onSelectTab }) => 
                   <button
                     type="button"
                     onClick={() => setTimeRange('month')}
-                    className={`px-3 py-1 rounded-lg text-xs font-bold cursor-pointer transition-colors ${
+                    className={`px-2.5 sm:px-3 py-1 rounded-lg text-xs font-bold cursor-pointer transition-colors ${
                       timeRange === 'month' ? 'bg-primary text-on-primary' : 'text-on-surface-variant hover:text-on-surface'
                     }`}
                   >
@@ -223,66 +238,66 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onSelectTab }) => 
             </div>
 
             {/* Metric KPI Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-              <div className="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant shadow-sm">
-                <span className="text-xs font-bold text-outline block mb-1">Tickets Processed</span>
-                <div className="text-2xl font-extrabold text-on-surface">1,284</div>
-                <span className="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full inline-block mt-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+              <div className="bg-surface-container-lowest p-3.5 sm:p-5 rounded-2xl border border-outline-variant shadow-xs">
+                <span className="text-[11px] sm:text-xs font-bold text-outline block mb-1">Tickets Processed</span>
+                <div className="text-2xl sm:text-3xl font-extrabold text-on-surface">1,284</div>
+                <span className="text-[10px] sm:text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full inline-block mt-1.5">
                   +18% throughput
                 </span>
               </div>
 
-              <div className="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant shadow-sm">
-                <span className="text-xs font-bold text-outline block mb-1">Avg Confidence</span>
-                <div className="text-2xl font-extrabold text-primary">94.8%</div>
-                <span className="text-xs font-bold text-primary bg-primary-container/20 px-2 py-0.5 rounded-full inline-block mt-2">
+              <div className="bg-surface-container-lowest p-3.5 sm:p-5 rounded-2xl border border-outline-variant shadow-xs">
+                <span className="text-[11px] sm:text-xs font-bold text-outline block mb-1">Avg Confidence</span>
+                <div className="text-2xl sm:text-3xl font-extrabold text-primary">94.8%</div>
+                <span className="text-[10px] sm:text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full inline-block mt-1.5">
                   High Precision
                 </span>
               </div>
 
-              <div className="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant shadow-sm">
-                <span className="text-xs font-bold text-outline block mb-1">Critical Priority</span>
-                <div className="text-2xl font-extrabold text-error">42</div>
-                <span className="text-xs font-bold text-error bg-error-container/30 px-2 py-0.5 rounded-full inline-block mt-2">
+              <div className="bg-surface-container-lowest p-3.5 sm:p-5 rounded-2xl border border-outline-variant shadow-xs">
+                <span className="text-[11px] sm:text-xs font-bold text-outline block mb-1">Critical Priority</span>
+                <div className="text-2xl sm:text-3xl font-extrabold text-error">42</div>
+                <span className="text-[10px] sm:text-xs font-bold text-error bg-error-container/30 px-2 py-0.5 rounded-full inline-block mt-1.5">
                   Immediate SLA
                 </span>
               </div>
 
-              <div className="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant shadow-sm">
-                <span className="text-xs font-bold text-outline block mb-1">Human Review Queue</span>
-                <div className="text-2xl font-extrabold text-amber-700">28</div>
-                <span className="text-xs font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full inline-block mt-2">
+              <div className="bg-surface-container-lowest p-3.5 sm:p-5 rounded-2xl border border-outline-variant shadow-xs">
+                <span className="text-[11px] sm:text-xs font-bold text-outline block mb-1">Human Review</span>
+                <div className="text-2xl sm:text-3xl font-extrabold text-amber-700">28</div>
+                <span className="text-[10px] sm:text-xs font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full inline-block mt-1.5">
                   &lt;70% Confidence
                 </span>
               </div>
 
-              <div className="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant shadow-sm ai-gradient-border">
-                <span className="text-xs font-bold text-outline block mb-1">Auto-Route Rate</span>
-                <div className="text-2xl font-extrabold text-primary flex items-center justify-between">
+              <div className="col-span-2 sm:col-span-1 bg-surface-container-lowest p-3.5 sm:p-5 rounded-2xl border border-outline-variant shadow-xs ai-gradient-border">
+                <span className="text-[11px] sm:text-xs font-bold text-outline block mb-1">Auto-Route Rate</span>
+                <div className="text-2xl sm:text-3xl font-extrabold text-primary flex items-center justify-between">
                   92.4%
                   <span className="material-symbols-outlined text-[18px]">auto_awesome</span>
                 </div>
-                <span className="text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full inline-block mt-2">
+                <span className="text-[10px] sm:text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full inline-block mt-1.5">
                   SupportFlow AI
                 </span>
               </div>
             </div>
 
             {/* Visual Bento Charts Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               {/* Ticket Categories Breakdown */}
-              <div className="bg-surface-container-lowest p-6 rounded-3xl border border-outline-variant shadow-sm">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="font-card-title text-card-title text-on-surface">Category Distribution</h3>
-                  <span className="text-xs text-outline font-bold">Inbound Ratio</span>
+              <div className="bg-surface-container-lowest p-4 sm:p-6 rounded-3xl border border-outline-variant shadow-xs">
+                <div className="flex items-center justify-between mb-4 sm:mb-6">
+                  <h3 className="font-bold text-sm sm:text-base text-on-surface">Category Distribution</h3>
+                  <span className="text-[11px] text-outline font-bold">Inbound Ratio</span>
                 </div>
-                <div className="space-y-4">
+                <div className="space-y-3.5 sm:space-y-4">
                   <div>
                     <div className="flex justify-between text-xs font-bold mb-1">
                       <span>Technical Issue / Bug Report</span>
                       <span>420 (33%)</span>
                     </div>
-                    <div className="w-full bg-surface-container-high rounded-full h-2.5 overflow-hidden">
+                    <div className="w-full bg-surface-container-high rounded-full h-2 sm:h-2.5 overflow-hidden">
                       <div className="bg-primary h-full rounded-full" style={{ width: '33%' }}></div>
                     </div>
                   </div>
@@ -292,7 +307,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onSelectTab }) => 
                       <span>Billing / Refund</span>
                       <span>320 (25%)</span>
                     </div>
-                    <div className="w-full bg-surface-container-high rounded-full h-2.5 overflow-hidden">
+                    <div className="w-full bg-surface-container-high rounded-full h-2 sm:h-2.5 overflow-hidden">
                       <div className="bg-secondary h-full rounded-full" style={{ width: '25%' }}></div>
                     </div>
                   </div>
@@ -302,7 +317,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onSelectTab }) => 
                       <span>Account Access / Password Reset</span>
                       <span>280 (22%)</span>
                     </div>
-                    <div className="w-full bg-surface-container-high rounded-full h-2.5 overflow-hidden">
+                    <div className="w-full bg-surface-container-high rounded-full h-2 sm:h-2.5 overflow-hidden">
                       <div className="bg-tertiary h-full rounded-full" style={{ width: '22%' }}></div>
                     </div>
                   </div>
@@ -312,7 +327,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onSelectTab }) => 
                       <span>Feature Request</span>
                       <span>140 (11%)</span>
                     </div>
-                    <div className="w-full bg-surface-container-high rounded-full h-2.5 overflow-hidden">
+                    <div className="w-full bg-surface-container-high rounded-full h-2 sm:h-2.5 overflow-hidden">
                       <div className="bg-amber-500 h-full rounded-full" style={{ width: '11%' }}></div>
                     </div>
                   </div>
@@ -322,7 +337,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onSelectTab }) => 
                       <span>General / Other</span>
                       <span>124 (9%)</span>
                     </div>
-                    <div className="w-full bg-surface-container-high rounded-full h-2.5 overflow-hidden">
+                    <div className="w-full bg-surface-container-high rounded-full h-2 sm:h-2.5 overflow-hidden">
                       <div className="bg-slate-400 h-full rounded-full" style={{ width: '9%' }}></div>
                     </div>
                   </div>
@@ -330,51 +345,51 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onSelectTab }) => 
               </div>
 
               {/* Department Routing Destination Breakdown */}
-              <div className="bg-surface-container-lowest p-6 rounded-3xl border border-outline-variant shadow-sm flex flex-col justify-between">
+              <div className="bg-surface-container-lowest p-4 sm:p-6 rounded-3xl border border-outline-variant shadow-xs flex flex-col justify-between">
                 <div>
-                  <div className="flex items-center justify-between mb-6">
-                    <h3 className="font-card-title text-card-title text-on-surface">Target Team Assignments</h3>
-                    <span className="text-xs text-primary font-bold bg-primary/10 px-2 py-0.5 rounded-full">
-                      Automated Dispatch
+                  <div className="flex items-center justify-between mb-4 sm:mb-6">
+                    <h3 className="font-bold text-sm sm:text-base text-on-surface">Target Team Assignments</h3>
+                    <span className="text-[11px] text-primary font-bold bg-primary/10 px-2 py-0.5 rounded-full">
+                      Auto Dispatch
                     </span>
                   </div>
 
-                  <div className="space-y-3">
-                    <div className="p-3 bg-surface-container-low rounded-xl flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <span className="w-3 h-3 rounded-full bg-primary"></span>
+                  <div className="space-y-2.5 sm:space-y-3">
+                    <div className="p-2.5 sm:p-3 bg-surface-container-low rounded-xl flex items-center justify-between">
+                      <div className="flex items-center gap-2.5 sm:gap-3">
+                        <span className="w-2.5 h-2.5 rounded-full bg-primary"></span>
                         <span className="text-xs font-bold text-on-surface">Infrastructure &amp; Engineering</span>
                       </div>
                       <span className="text-xs font-extrabold text-primary">38%</span>
                     </div>
 
-                    <div className="p-3 bg-surface-container-low rounded-xl flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <span className="w-3 h-3 rounded-full bg-emerald-600"></span>
+                    <div className="p-2.5 sm:p-3 bg-surface-container-low rounded-xl flex items-center justify-between">
+                      <div className="flex items-center gap-2.5 sm:gap-3">
+                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
                         <span className="text-xs font-bold text-on-surface">Billing Team</span>
                       </div>
                       <span className="text-xs font-extrabold text-emerald-700">25%</span>
                     </div>
 
-                    <div className="p-3 bg-surface-container-low rounded-xl flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <span className="w-3 h-3 rounded-full bg-blue-600"></span>
+                    <div className="p-2.5 sm:p-3 bg-surface-container-low rounded-xl flex items-center justify-between">
+                      <div className="flex items-center gap-2.5 sm:gap-3">
+                        <span className="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
                         <span className="text-xs font-bold text-on-surface">Account Team</span>
                       </div>
                       <span className="text-xs font-extrabold text-blue-700">20%</span>
                     </div>
 
-                    <div className="p-3 bg-surface-container-low rounded-xl flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <span className="w-3 h-3 rounded-full bg-amber-600"></span>
+                    <div className="p-2.5 sm:p-3 bg-surface-container-low rounded-xl flex items-center justify-between">
+                      <div className="flex items-center gap-2.5 sm:gap-3">
+                        <span className="w-2.5 h-2.5 rounded-full bg-amber-600"></span>
                         <span className="text-xs font-bold text-on-surface">Product Team</span>
                       </div>
                       <span className="text-xs font-extrabold text-amber-800">11%</span>
                     </div>
 
-                    <div className="p-3 bg-surface-container-low rounded-xl flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <span className="w-3 h-3 rounded-full bg-slate-400"></span>
+                    <div className="p-2.5 sm:p-3 bg-surface-container-low rounded-xl flex items-center justify-between">
+                      <div className="flex items-center gap-2.5 sm:gap-3">
+                        <span className="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
                         <span className="text-xs font-bold text-on-surface">General Support</span>
                       </div>
                       <span className="text-xs font-extrabold text-slate-600">6%</span>
@@ -382,7 +397,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onSelectTab }) => 
                   </div>
                 </div>
 
-                <div className="pt-4 mt-4 border-t border-outline-variant text-xs text-outline flex justify-between">
+                <div className="pt-3 sm:pt-4 mt-3 sm:mt-4 border-t border-outline-variant text-[11px] sm:text-xs text-outline flex justify-between">
                   <span>Routing Accuracy SLA</span>
                   <span className="font-bold text-emerald-600">99.1% Compliance</span>
                 </div>
@@ -390,45 +405,45 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onSelectTab }) => 
             </div>
 
             {/* Recent Triage Events Stream */}
-            <div className="bg-surface-container-lowest p-6 rounded-3xl border border-outline-variant shadow-sm">
-              <div className="flex items-center justify-between mb-6">
+            <div className="bg-surface-container-lowest p-4 sm:p-6 rounded-3xl border border-outline-variant shadow-xs">
+              <div className="flex items-center justify-between mb-4 sm:mb-6">
                 <div>
-                  <h3 className="font-card-title text-card-title text-on-surface">Live Triage Event Stream</h3>
-                  <p className="text-xs text-outline">Real-time decisions generated by SupportFlow AI</p>
+                  <h3 className="font-bold text-sm sm:text-base text-on-surface">Live Triage Event Stream</h3>
+                  <p className="text-[11px] text-outline">Real-time decisions generated by SupportFlow AI</p>
                 </div>
                 <button
                   type="button"
                   onClick={() => onSelectTab('analyze')}
                   className="text-xs font-bold text-primary hover:underline cursor-pointer flex items-center gap-1"
                 >
-                  Analyze New Ticket <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+                  Analyze New <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
                 </button>
               </div>
 
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
+              <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
+                <table className="w-full text-left border-collapse min-w-[560px]">
                   <thead>
                     <tr className="border-b border-outline-variant text-[11px] text-outline font-bold uppercase tracking-wider">
-                      <th className="py-3 px-3">Event ID</th>
-                      <th className="py-3 px-3">Subject</th>
-                      <th className="py-3 px-3">Category</th>
-                      <th className="py-3 px-3">Urgency</th>
-                      <th className="py-3 px-3">Assigned Team</th>
-                      <th className="py-3 px-3 text-right">Confidence</th>
-                      <th className="py-3 px-3 text-right">Status</th>
+                      <th className="py-2.5 sm:py-3 px-2 sm:px-3">Event ID</th>
+                      <th className="py-2.5 sm:py-3 px-2 sm:px-3">Subject</th>
+                      <th className="py-2.5 sm:py-3 px-2 sm:px-3">Category</th>
+                      <th className="py-2.5 sm:py-3 px-2 sm:px-3">Urgency</th>
+                      <th className="py-2.5 sm:py-3 px-2 sm:px-3">Target Team</th>
+                      <th className="py-2.5 sm:py-3 px-2 sm:px-3 text-right">Confidence</th>
+                      <th className="py-2.5 sm:py-3 px-2 sm:px-3 text-right">Status</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-outline-variant/60 text-xs sm:text-sm">
                     {filteredEvents.map((e) => (
                       <tr key={e.id} className="hover:bg-surface-container-low/60 transition-colors">
-                        <td className="py-3.5 px-3 font-bold text-primary">{e.id}</td>
-                        <td className="py-3.5 px-3 text-on-surface font-medium max-w-xs truncate" title={e.subject}>
+                        <td className="py-3 px-2 sm:px-3 font-mono font-bold text-primary text-xs">{e.id}</td>
+                        <td className="py-3 px-2 sm:px-3 text-on-surface font-medium max-w-[180px] sm:max-w-xs truncate" title={e.subject}>
                           {e.subject}
                         </td>
-                        <td className="py-3.5 px-3 text-on-surface-variant">{e.category}</td>
-                        <td className="py-3.5 px-3">
+                        <td className="py-3 px-2 sm:px-3 text-on-surface-variant text-xs">{e.category}</td>
+                        <td className="py-3 px-2 sm:px-3">
                           <span
-                            className={`px-2 py-0.5 rounded-full text-[11px] font-bold ${
+                            className={`px-2 py-0.5 rounded-full text-[10px] sm:text-[11px] font-bold ${
                               e.urgency === 'Critical'
                                 ? 'bg-error-container text-on-error-container'
                                 : e.urgency === 'High'
@@ -439,11 +454,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onSelectTab }) => 
                             {e.urgency}
                           </span>
                         </td>
-                        <td className="py-3.5 px-3 text-on-surface font-medium">{e.team}</td>
-                        <td className="py-3.5 px-3 text-right font-bold text-primary">{e.confidence}%</td>
-                        <td className="py-3.5 px-3 text-right">
+                        <td className="py-3 px-2 sm:px-3 text-on-surface font-medium text-xs">{e.team}</td>
+                        <td className="py-3 px-2 sm:px-3 text-right font-bold text-primary text-xs">{e.confidence}%</td>
+                        <td className="py-3 px-2 sm:px-3 text-right">
                           <span
-                            className={`inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full ${
+                            className={`inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-bold px-2 py-0.5 rounded-full ${
                               e.humanReview
                                 ? 'bg-amber-100 text-amber-800'
                                 : 'bg-emerald-100 text-emerald-800'
@@ -462,14 +477,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onSelectTab }) => 
         </div>
       </div>
 
-      {/* Floating Action Button */}
+      {/* Floating Action Button (above mobile bottom bar) */}
       <button
         type="button"
         onClick={() => onSelectTab('analyze')}
         title="Analyze Single Ticket"
-        className="fixed bottom-8 right-8 w-14 h-14 bg-primary text-on-primary rounded-full shadow-2xl flex items-center justify-center hover:scale-105 active:scale-95 transition-transform z-40 cursor-pointer"
+        className="fixed bottom-20 right-4 lg:bottom-8 lg:right-8 w-13 h-13 sm:w-14 sm:h-14 bg-primary text-on-primary rounded-full shadow-2xl flex items-center justify-center hover:scale-105 active:scale-95 transition-transform z-40 cursor-pointer"
       >
-        <span className="material-symbols-outlined text-[28px]">add</span>
+        <span className="material-symbols-outlined text-[26px] sm:text-[28px]">add</span>
       </button>
     </div>
   );

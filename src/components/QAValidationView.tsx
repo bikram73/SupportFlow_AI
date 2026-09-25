@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { QATestCase, QATestResult, AnalyzedTicket, RoutingStatus } from '../types';
+import { QATestResult, AnalyzedTicket } from '../types';
 import { GOLDEN_QA_TEST_CASES, ruleBasedTriage, evaluateDecisionBoundary } from '../utils/triageFallback';
 
 export const QAValidationView: React.FC = () => {
@@ -119,7 +119,6 @@ export const QAValidationView: React.FC = () => {
       });
 
       setCompletedCount(i + 1);
-      // Allow UI tick
       await new Promise((r) => setTimeout(r, 15));
     }
 
@@ -197,18 +196,18 @@ export const QAValidationView: React.FC = () => {
 
   return (
     <div id="qa-validation-view" className="w-full">
-      <div className="max-w-container-max-width mx-auto px-margin-desktop py-8">
+      <div className="max-w-container-max-width mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-8">
         {/* Header */}
-        <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="mb-6 sm:mb-8 flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full mb-3 text-xs font-bold">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full mb-2.5 text-xs font-bold">
               <span className="material-symbols-outlined text-[16px]">verified</span> PRD QA &amp; Hardening Suite v1.0
             </div>
-            <h1 className="font-section-title text-section-title text-on-surface mb-1">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-on-surface tracking-tight mb-1">
               End-to-End QA Validation &amp; Verification
             </h1>
-            <p className="text-on-surface-variant text-sm">
-              Functional tests, boundary value verification (69/70/89/90), security &amp; injection audits, and golden dataset regression.
+            <p className="text-on-surface-variant text-xs sm:text-sm">
+              Functional tests, boundary verification (69/70/89/90), security audits, and golden regression testing.
             </p>
           </div>
 
@@ -217,85 +216,85 @@ export const QAValidationView: React.FC = () => {
               type="button"
               onClick={runFullQASuite}
               disabled={isRunning}
-              className="px-5 py-2.5 bg-primary text-on-primary rounded-xl text-xs font-bold hover:opacity-95 transition-all flex items-center gap-2 cursor-pointer shadow-md disabled:opacity-50"
+              className="w-full sm:w-auto px-4 sm:px-5 py-2.5 bg-primary text-on-primary rounded-xl text-xs font-bold hover:opacity-95 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md disabled:opacity-50 min-h-[42px]"
             >
               <span className="material-symbols-outlined text-[18px]">
                 {isRunning ? 'sync' : 'play_arrow'}
               </span>
-              {isRunning ? `Running Tests (${completedCount}/${GOLDEN_QA_TEST_CASES.length})...` : 'Run All QA Tests'}
+              <span>{isRunning ? `Running (${completedCount}/${GOLDEN_QA_TEST_CASES.length})...` : 'Run All QA Tests'}</span>
             </button>
             {testResults.length > 0 && (
               <button
                 type="button"
                 onClick={exportMarkdownReport}
-                className="px-4 py-2.5 bg-surface-container-high hover:bg-surface-container-highest text-on-surface rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
+                className="w-full sm:w-auto px-4 py-2.5 bg-surface-container-high hover:bg-surface-container-highest text-on-surface rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer min-h-[42px]"
               >
-                <span className="material-symbols-outlined text-[18px]">download</span> Export QA Report (.md)
+                <span className="material-symbols-outlined text-[18px]">download</span> Export Report (.md)
               </button>
             )}
           </div>
         </div>
 
         {/* Scorecard KPI Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
-          <div className="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant shadow-sm">
-            <span className="text-xs font-bold text-outline block mb-1">Total Test Fixtures</span>
-            <div className="text-3xl font-extrabold text-on-surface">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 mb-6 sm:mb-8">
+          <div className="bg-surface-container-lowest p-3.5 sm:p-5 rounded-2xl border border-outline-variant shadow-xs">
+            <span className="text-[11px] sm:text-xs font-bold text-outline block mb-1">Test Fixtures</span>
+            <div className="text-2xl sm:text-3xl font-extrabold text-on-surface">
               {totalTests > 0 ? totalTests : GOLDEN_QA_TEST_CASES.length}
             </div>
-            <span className="text-[11px] text-outline mt-1 block">Groups A through P</span>
+            <span className="text-[10px] sm:text-[11px] text-outline mt-1 block">Groups A–P</span>
           </div>
 
-          <div className="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant shadow-sm">
-            <span className="text-xs font-bold text-outline block mb-1">Passed Assertions</span>
-            <div className="text-3xl font-extrabold text-emerald-600">
+          <div className="bg-surface-container-lowest p-3.5 sm:p-5 rounded-2xl border border-outline-variant shadow-xs">
+            <span className="text-[11px] sm:text-xs font-bold text-outline block mb-1">Passed Tests</span>
+            <div className="text-2xl sm:text-3xl font-extrabold text-emerald-600">
               {totalTests > 0 ? passedTests : GOLDEN_QA_TEST_CASES.length}
             </div>
-            <span className="text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full inline-block mt-1">
+            <span className="text-[10px] sm:text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full inline-block mt-1">
               Zero Regressions
             </span>
           </div>
 
-          <div className="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant shadow-sm">
-            <span className="text-xs font-bold text-outline block mb-1">Failed Assertions</span>
-            <div className="text-3xl font-extrabold text-on-surface">
+          <div className="bg-surface-container-lowest p-3.5 sm:p-5 rounded-2xl border border-outline-variant shadow-xs">
+            <span className="text-[11px] sm:text-xs font-bold text-outline block mb-1">Failed Tests</span>
+            <div className="text-2xl sm:text-3xl font-extrabold text-on-surface">
               {totalTests > 0 ? failedTests : 0}
             </div>
-            <span className="text-[11px] text-outline mt-1 block">Defects / Exceptions</span>
+            <span className="text-[10px] sm:text-[11px] text-outline mt-1 block">Defects</span>
           </div>
 
-          <div className="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant shadow-sm">
-            <span className="text-xs font-bold text-outline block mb-1">Boundary Conformity</span>
-            <div className="text-3xl font-extrabold text-primary">100%</div>
-            <span className="text-[11px] text-outline mt-1 block">Rules A, B, C Verified</span>
+          <div className="bg-surface-container-lowest p-3.5 sm:p-5 rounded-2xl border border-outline-variant shadow-xs">
+            <span className="text-[11px] sm:text-xs font-bold text-outline block mb-1">Boundaries</span>
+            <div className="text-2xl sm:text-3xl font-extrabold text-primary">100%</div>
+            <span className="text-[10px] sm:text-[11px] text-outline mt-1 block">Rules A, B, C</span>
           </div>
 
-          <div className="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant shadow-sm ai-gradient-border">
-            <span className="text-xs font-bold text-outline block mb-1">PRD Pass Score</span>
-            <div className="text-3xl font-extrabold text-primary flex items-center justify-between">
+          <div className="col-span-2 sm:col-span-1 bg-surface-container-lowest p-3.5 sm:p-5 rounded-2xl border border-outline-variant shadow-xs ai-gradient-border">
+            <span className="text-[11px] sm:text-xs font-bold text-outline block mb-1">PRD Pass Score</span>
+            <div className="text-2xl sm:text-3xl font-extrabold text-primary flex items-center justify-between">
               {passRate}%
               <span className="material-symbols-outlined text-[20px] text-emerald-600">check_circle</span>
             </div>
-            <span className="text-[11px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full inline-block mt-1">
+            <span className="text-[10px] sm:text-[11px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full inline-block mt-1">
               🟢 PASS Approved
             </span>
           </div>
         </div>
 
         {/* Interactive Decision Boundary Simulator */}
-        <div className="bg-surface-container-lowest p-6 sm:p-8 rounded-3xl border border-outline-variant shadow-sm mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-card-title text-card-title text-on-surface flex items-center gap-2">
-              <span className="material-symbols-outlined text-primary">tune</span> Interactive Decision Boundary &amp; Edge-Case Sandbox
+        <div className="bg-surface-container-lowest p-4 sm:p-6 lg:p-8 rounded-3xl border border-outline-variant shadow-xs mb-6 sm:mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4 mb-3 sm:mb-4">
+            <h3 className="font-bold text-base sm:text-lg text-on-surface flex items-center gap-2">
+              <span className="material-symbols-outlined text-primary text-[20px]">tune</span> Boundary &amp; Edge-Case Sandbox
             </h3>
-            <span className="text-xs text-outline font-medium">Verify 69% / 70% / 89% / 90% Rules</span>
+            <span className="text-[11px] sm:text-xs text-outline font-medium">Verify 69% / 70% / 89% / 90% Rules</span>
           </div>
-          <p className="text-xs text-on-surface-variant mb-6">
-            Simulate exact confidence threshold inputs to audit the three core PRD rules: <strong>Rule A (≥90% Auto-Routed)</strong>, <strong>Rule B (70–89% Recommended Assignment)</strong>, and <strong>Rule C (&lt;70% Human Review Required)</strong>.
+          <p className="text-xs text-on-surface-variant mb-4 sm:mb-6 leading-relaxed">
+            Audit the three core PRD rules: <strong>Rule A (≥90% Auto-Routed)</strong>, <strong>Rule B (70–89% Recommended)</strong>, and <strong>Rule C (&lt;70% Human Review)</strong>.
           </p>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            <div className="lg:col-span-6 space-y-4">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6">
+            <div className="lg:col-span-6 space-y-3.5 sm:space-y-4">
               <div>
                 <label className="block text-xs font-bold text-on-surface mb-1">Test Ticket Subject</label>
                 <input
@@ -309,7 +308,7 @@ export const QAValidationView: React.FC = () => {
               <div>
                 <label className="block text-xs font-bold text-on-surface mb-1">Test Ticket Body</label>
                 <textarea
-                  rows={3}
+                  rows={2}
                   value={customBody}
                   onChange={(e) => setCustomBody(e.target.value)}
                   className="w-full px-3 py-2 text-xs bg-surface-container-low border border-outline-variant rounded-xl resize-none"
@@ -318,14 +317,14 @@ export const QAValidationView: React.FC = () => {
 
               <div>
                 <div className="flex justify-between items-center mb-1">
-                  <label className="text-xs font-bold text-on-surface">Simulated Confidence Score: <span className="text-primary font-extrabold">{customConfidence}%</span></label>
+                  <label className="text-xs font-bold text-on-surface">Simulated Confidence: <span className="text-primary font-extrabold">{customConfidence}%</span></label>
                   <div className="flex gap-1">
                     {[69, 70, 89, 90, 95].map((val) => (
                       <button
                         key={val}
                         type="button"
                         onClick={() => setCustomConfidence(val)}
-                        className={`px-2 py-0.5 rounded text-[10px] font-bold cursor-pointer ${
+                        className={`px-1.5 sm:px-2 py-0.5 rounded text-[10px] font-bold cursor-pointer ${
                           customConfidence === val ? 'bg-primary text-on-primary' : 'bg-surface-container-high text-on-surface'
                         }`}
                       >
@@ -340,24 +339,24 @@ export const QAValidationView: React.FC = () => {
                   max={100}
                   value={customConfidence}
                   onChange={(e) => setCustomConfidence(Number(e.target.value))}
-                  className="w-full accent-primary cursor-pointer"
+                  className="w-full accent-primary cursor-pointer h-2"
                 />
               </div>
 
               <button
                 type="button"
                 onClick={handleRunSandbox}
-                className="w-full bg-surface-container-high hover:bg-surface-container-highest text-on-surface py-2.5 rounded-xl font-bold text-xs transition-colors cursor-pointer flex items-center justify-center gap-1.5"
+                className="w-full bg-surface-container-high hover:bg-surface-container-highest text-on-surface py-2.5 sm:py-3 rounded-xl font-bold text-xs transition-colors cursor-pointer flex items-center justify-center gap-1.5 min-h-[42px]"
               >
                 <span className="material-symbols-outlined text-[16px]">play_arrow</span> Evaluate Decision Engine
               </button>
             </div>
 
-            <div className="lg:col-span-6 bg-surface-bright p-5 rounded-2xl border border-outline-variant flex flex-col justify-between">
+            <div className="lg:col-span-6 bg-surface-bright p-4 sm:p-5 rounded-2xl border border-outline-variant flex flex-col justify-between">
               {sandboxResult ? (
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-primary">{sandboxResult.id}</span>
+                    <span className="text-xs font-bold text-primary font-mono">{sandboxResult.id}</span>
                     <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${
                       sandboxResult.routingStatus === 'Auto-Routed'
                         ? 'bg-emerald-100 text-emerald-800'
@@ -369,36 +368,36 @@ export const QAValidationView: React.FC = () => {
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-3 text-xs">
-                    <div className="p-3 bg-white rounded-xl border border-outline-variant">
+                  <div className="grid grid-cols-2 gap-2 sm:gap-3 text-xs">
+                    <div className="p-2.5 sm:p-3 bg-white rounded-xl border border-outline-variant">
                       <span className="text-outline block text-[10px] uppercase font-bold">Category</span>
-                      <span className="font-bold text-on-surface">{sandboxResult.category}</span>
+                      <span className="font-bold text-on-surface text-xs">{sandboxResult.category}</span>
                     </div>
-                    <div className="p-3 bg-white rounded-xl border border-outline-variant">
+                    <div className="p-2.5 sm:p-3 bg-white rounded-xl border border-outline-variant">
                       <span className="text-outline block text-[10px] uppercase font-bold">Urgency</span>
-                      <span className="font-bold text-on-surface">{sandboxResult.urgency}</span>
+                      <span className="font-bold text-on-surface text-xs">{sandboxResult.urgency}</span>
                     </div>
-                    <div className="p-3 bg-white rounded-xl border border-outline-variant">
+                    <div className="p-2.5 sm:p-3 bg-white rounded-xl border border-outline-variant">
                       <span className="text-outline block text-[10px] uppercase font-bold">Target Team</span>
-                      <span className="font-bold text-on-surface">{sandboxResult.assignedTeam}</span>
+                      <span className="font-bold text-on-surface text-xs">{sandboxResult.assignedTeam}</span>
                     </div>
-                    <div className="p-3 bg-white rounded-xl border border-outline-variant">
-                      <span className="text-outline block text-[10px] uppercase font-bold">Human Review Required?</span>
-                      <span className={`font-bold ${sandboxResult.humanReview ? 'text-amber-700' : 'text-emerald-700'}`}>
-                        {sandboxResult.humanReview ? 'YES (Do Not Auto-Route)' : 'NO (Auto-Route Approved)'}
+                    <div className="p-2.5 sm:p-3 bg-white rounded-xl border border-outline-variant">
+                      <span className="text-outline block text-[10px] uppercase font-bold">Human Review?</span>
+                      <span className={`font-bold text-xs ${sandboxResult.humanReview ? 'text-amber-700' : 'text-emerald-700'}`}>
+                        {sandboxResult.humanReview ? 'YES (Review Required)' : 'NO (Auto-Routed)'}
                       </span>
                     </div>
                   </div>
 
-                  <div className="p-3 bg-white rounded-xl border border-outline-variant">
-                    <span className="text-outline block text-[10px] uppercase font-bold mb-1">AI Decision Rationale</span>
+                  <div className="p-2.5 sm:p-3 bg-white rounded-xl border border-outline-variant">
+                    <span className="text-outline block text-[10px] uppercase font-bold mb-0.5">AI Decision Rationale</span>
                     <p className="text-xs text-on-surface leading-relaxed">{sandboxResult.reason}</p>
                   </div>
                 </div>
               ) : (
-                <div className="flex flex-col items-center justify-center text-center my-auto py-8 text-outline">
-                  <span className="material-symbols-outlined text-[36px] mb-2">science</span>
-                  <p className="text-xs">Adjust parameters and click "Evaluate Decision Engine" to test boundary outputs.</p>
+                <div className="flex flex-col items-center justify-center text-center my-auto py-6 sm:py-8 text-outline">
+                  <span className="material-symbols-outlined text-[32px] sm:text-[36px] mb-1.5">science</span>
+                  <p className="text-xs">Adjust parameters and tap "Evaluate Decision Engine".</p>
                 </div>
               )}
             </div>
@@ -406,25 +405,25 @@ export const QAValidationView: React.FC = () => {
         </div>
 
         {/* Test Cases Results Table */}
-        <div className="bg-surface-container-lowest p-6 sm:p-8 rounded-3xl border border-outline-variant shadow-sm">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div className="bg-surface-container-lowest p-4 sm:p-6 lg:p-8 rounded-3xl border border-outline-variant shadow-xs">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
             <div>
-              <h3 className="font-card-title text-card-title text-on-surface">Golden Test Dataset Execution Matrix</h3>
-              <p className="text-xs text-outline">
+              <h3 className="font-bold text-base sm:text-lg text-on-surface">Golden Test Dataset Matrix</h3>
+              <p className="text-[11px] sm:text-xs text-outline">
                 {testResults.length > 0
                   ? `Executed ${testResults.length} test cases with complete assertion checks`
-                  : 'Click "Run All QA Tests" to execute the test suite'}
+                  : 'Tap "Run All QA Tests" to execute the test suite'}
               </p>
             </div>
 
             {testResults.length > 0 && (
-              <div className="flex flex-wrap gap-1.5">
+              <div className="flex flex-wrap gap-1">
                 {['All', 'Passed', 'Failed', 'Functional', 'Boundary', 'Security', 'Ambiguous', 'Unicode'].map((f) => (
                   <button
                     key={f}
                     type="button"
                     onClick={() => setActiveFilter(f)}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-bold cursor-pointer transition-colors ${
+                    className={`px-2 sm:px-2.5 py-1 rounded-lg text-xs font-bold cursor-pointer transition-colors ${
                       activeFilter === f ? 'bg-primary text-on-primary' : 'bg-surface-container-low text-on-surface hover:bg-surface-container-high'
                     }`}
                   >
@@ -436,48 +435,48 @@ export const QAValidationView: React.FC = () => {
           </div>
 
           {testResults.length === 0 ? (
-            <div className="text-center py-16 border-2 border-dashed border-outline-variant rounded-2xl bg-surface-container-low">
-              <span className="material-symbols-outlined text-[48px] text-primary mb-3">checklist</span>
-              <h4 className="font-bold text-on-surface text-base mb-1">QA Validation Ready</h4>
+            <div className="text-center py-10 sm:py-16 border-2 border-dashed border-outline-variant rounded-2xl bg-surface-container-low px-4">
+              <span className="material-symbols-outlined text-[40px] sm:text-[48px] text-primary mb-2 sm:mb-3">checklist</span>
+              <h4 className="font-bold text-on-surface text-sm sm:text-base mb-1">QA Validation Ready</h4>
               <p className="text-xs text-outline max-w-md mx-auto mb-4">
-                Execute all 50 automated tests covering Group A (Landing), Group B (Input), Groups C-K (12 Taxonomies), Group L (Ambiguous), Group M (Boundaries 69/70/89/90), and Security/Unicode.
+                Execute automated test fixtures covering Group A (Landing), Group B (Input), Groups C–K (12 Taxonomies), Group L (Ambiguous), and Group M (Boundaries).
               </p>
               <button
                 type="button"
                 onClick={runFullQASuite}
-                className="px-6 py-3 bg-primary text-on-primary rounded-xl font-bold text-xs hover:opacity-90 cursor-pointer shadow-sm inline-flex items-center gap-2"
+                className="px-5 sm:px-6 py-2.5 sm:py-3 bg-primary text-on-primary rounded-xl font-bold text-xs hover:opacity-90 cursor-pointer shadow-xs inline-flex items-center gap-2"
               >
                 <span className="material-symbols-outlined text-[18px]">play_arrow</span> Run Automated Test Suite
               </button>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
+            <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
+              <table className="w-full text-left border-collapse min-w-[560px]">
                 <thead>
                   <tr className="border-b border-outline-variant text-[11px] text-outline font-bold uppercase tracking-wider">
-                    <th className="py-3 px-3">Test ID</th>
-                    <th className="py-3 px-3">Group / Name</th>
-                    <th className="py-3 px-3">Category</th>
-                    <th className="py-3 px-3">Urgency</th>
-                    <th className="py-3 px-3">Confidence</th>
-                    <th className="py-3 px-3">Routing Status</th>
-                    <th className="py-3 px-3">Human Review</th>
-                    <th className="py-3 px-3 text-right">Result</th>
+                    <th className="py-2.5 sm:py-3 px-2 sm:px-3">Test ID</th>
+                    <th className="py-2.5 sm:py-3 px-2 sm:px-3">Group / Name</th>
+                    <th className="py-2.5 sm:py-3 px-2 sm:px-3">Category</th>
+                    <th className="py-2.5 sm:py-3 px-2 sm:px-3">Urgency</th>
+                    <th className="py-2.5 sm:py-3 px-2 sm:px-3">Confidence</th>
+                    <th className="py-2.5 sm:py-3 px-2 sm:px-3">Routing</th>
+                    <th className="py-2.5 sm:py-3 px-2 sm:px-3">Review</th>
+                    <th className="py-2.5 sm:py-3 px-2 sm:px-3 text-right">Result</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-outline-variant/60 text-xs">
                   {filteredResults.map((r) => (
                     <tr key={r.testCase.id} className="hover:bg-surface-container-low/60 transition-colors">
-                      <td className="py-3.5 px-3 font-mono font-bold text-primary">{r.testCase.id}</td>
-                      <td className="py-3.5 px-3">
+                      <td className="py-3 px-2 sm:px-3 font-mono font-bold text-primary">{r.testCase.id}</td>
+                      <td className="py-3 px-2 sm:px-3">
                         <span className="font-bold text-on-surface block">{r.testCase.name}</span>
                         <span className="text-[11px] text-outline">{r.testCase.group}</span>
                       </td>
-                      <td className="py-3.5 px-3 font-medium text-on-surface">{r.actualResult?.category || 'N/A'}</td>
-                      <td className="py-3.5 px-3 font-medium text-on-surface">{r.actualResult?.urgency || 'N/A'}</td>
-                      <td className="py-3.5 px-3 font-bold text-primary">{r.actualResult?.confidence}%</td>
-                      <td className="py-3.5 px-3">
-                        <span className={`px-2 py-0.5 rounded-full text-[11px] font-bold ${
+                      <td className="py-3 px-2 sm:px-3 font-medium text-on-surface">{r.actualResult?.category || 'N/A'}</td>
+                      <td className="py-3 px-2 sm:px-3 font-medium text-on-surface">{r.actualResult?.urgency || 'N/A'}</td>
+                      <td className="py-3 px-2 sm:px-3 font-bold text-primary">{r.actualResult?.confidence}%</td>
+                      <td className="py-3 px-2 sm:px-3">
+                        <span className={`px-2 py-0.5 rounded-full text-[10px] sm:text-[11px] font-bold ${
                           r.actualResult?.routingStatus === 'Auto-Routed'
                             ? 'bg-emerald-100 text-emerald-800'
                             : r.actualResult?.routingStatus === 'Recommended'
@@ -487,16 +486,16 @@ export const QAValidationView: React.FC = () => {
                           {r.actualResult?.routingStatus}
                         </span>
                       </td>
-                      <td className="py-3.5 px-3">
+                      <td className="py-3 px-2 sm:px-3">
                         <span className={`text-[11px] font-bold ${r.actualResult?.humanReview ? 'text-amber-700' : 'text-emerald-700'}`}>
-                          {r.actualResult?.humanReview ? 'Flagged (Yes)' : 'Approved (No)'}
+                          {r.actualResult?.humanReview ? 'Flagged' : 'Auto'}
                         </span>
                       </td>
-                      <td className="py-3.5 px-3 text-right">
-                        <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-bold text-[11px] ${
+                      <td className="py-3 px-2 sm:px-3 text-right">
+                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-bold text-[10px] sm:text-[11px] ${
                           r.passed ? 'bg-emerald-100 text-emerald-800' : 'bg-error-container text-on-error-container'
                         }`}>
-                          <span className="material-symbols-outlined text-[13px]">
+                          <span className="material-symbols-outlined text-[12px]">
                             {r.passed ? 'check_circle' : 'cancel'}
                           </span>
                           {r.passed ? 'PASS' : 'FAIL'}

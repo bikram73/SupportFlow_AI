@@ -165,36 +165,36 @@ export const AnalyzeTicketView: React.FC = () => {
 
   return (
     <div id="analyze-view" className="w-full">
-      <div className="max-w-container-max-width mx-auto px-margin-desktop py-8">
+      <div className="max-w-container-max-width mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-8">
         {/* Header */}
-        <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="mb-6 sm:mb-8 flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4">
           <div>
-            <h1 className="font-section-title text-section-title text-on-surface mb-1">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-on-surface tracking-tight mb-1">
               Single Ticket Triage &amp; Analysis
             </h1>
-            <p className="text-on-surface-variant text-sm">
+            <p className="text-on-surface-variant text-xs sm:text-sm">
               Real-time classification, urgency detection, confidence scoring, and team routing powered by SupportFlow AI.
             </p>
           </div>
-          <div className="flex items-center gap-2 bg-surface-container-low px-3 py-1.5 rounded-full border border-outline-variant text-xs text-outline font-medium">
+          <div className="self-start md:self-auto flex items-center gap-2 bg-surface-container-low px-3 py-1.5 rounded-full border border-outline-variant text-xs text-outline font-medium">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
             AI Engine Active
           </div>
         </div>
 
         {/* Quick Sample Selector */}
-        <div className="mb-8 p-4 bg-surface-container-lowest rounded-2xl border border-outline-variant shadow-sm">
+        <div className="mb-6 sm:mb-8 p-3.5 sm:p-4 bg-surface-container-lowest rounded-2xl border border-outline-variant shadow-xs">
           <div className="text-xs font-bold text-outline mb-2.5 flex items-center gap-1.5">
             <span className="material-symbols-outlined text-primary text-[16px]">touch_app</span>
-            Test Predefined Support Tickets (Click to load):
+            Test Predefined Support Tickets (Tap to load):
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5 sm:gap-2">
             {sampleTickets.map((s) => (
               <button
                 key={s.id}
                 type="button"
                 onClick={() => handleSelectSample(s)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-medium border transition-all cursor-pointer ${
+                className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-medium border transition-all cursor-pointer ${
                   subject === s.subject
                     ? 'bg-primary text-on-primary border-primary font-bold shadow-xs'
                     : 'bg-surface-container-low text-on-surface hover:bg-surface-container-high border-outline-variant'
@@ -207,27 +207,27 @@ export const AnalyzeTicketView: React.FC = () => {
         </div>
 
         {/* Workspace Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 mb-8 sm:mb-12">
           {/* Input Panel */}
-          <div className="lg:col-span-5 bg-surface-container-lowest p-6 sm:p-8 rounded-3xl shadow-sm border border-outline-variant flex flex-col justify-between">
+          <div className="lg:col-span-5 bg-surface-container-lowest p-4 sm:p-6 lg:p-8 rounded-3xl shadow-xs border border-outline-variant flex flex-col justify-between">
             <div>
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="font-card-title text-card-title text-on-surface flex items-center gap-2">
-                  <span className="material-symbols-outlined text-primary">edit_note</span> Ticket Input
+              <div className="flex items-center justify-between mb-4 sm:mb-6">
+                <h3 className="font-bold text-base sm:text-lg text-on-surface flex items-center gap-2">
+                  <span className="material-symbols-outlined text-primary text-[20px]">edit_note</span> Ticket Input
                 </h3>
-                <span className="text-xs text-outline font-medium">Form / REST API</span>
+                <span className="text-[11px] sm:text-xs text-outline font-medium">Form / REST API</span>
               </div>
 
               {errorMessage && (
                 <div className="mb-4 p-3.5 bg-error-container text-on-error-container rounded-xl text-xs flex items-center gap-2 font-medium">
-                  <span className="material-symbols-outlined text-[18px]">error</span>
-                  {errorMessage}
+                  <span className="material-symbols-outlined text-[18px] shrink-0">error</span>
+                  <span>{errorMessage}</span>
                 </div>
               )}
 
-              <form onSubmit={handleAnalyze} className="space-y-5" noValidate>
+              <form onSubmit={handleAnalyze} className="space-y-4 sm:space-y-5" noValidate>
                 <div>
-                  <label htmlFor="ticket-subject" className="block text-xs font-bold text-on-surface mb-2">
+                  <label htmlFor="ticket-subject" className="block text-xs font-bold text-on-surface mb-1.5">
                     Ticket Subject <span className="text-error">*</span>
                   </label>
                   <input
@@ -241,7 +241,7 @@ export const AnalyzeTicketView: React.FC = () => {
                       if (errorMessage) setErrorMessage(null);
                     }}
                     placeholder="e.g. Cannot login after resetting password"
-                    className={`w-full px-4 py-3 rounded-xl bg-surface-container-low border transition-all text-sm text-on-surface placeholder:text-outline focus:outline-none ${
+                    className={`w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl bg-surface-container-low border transition-all text-sm text-on-surface placeholder:text-outline focus:outline-none ${
                       fieldErrors.subject ? 'border-error focus:border-error' : 'border-outline-variant focus:border-primary'
                     }`}
                   />
@@ -251,12 +251,12 @@ export const AnalyzeTicketView: React.FC = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="ticket-desc" className="block text-xs font-bold text-on-surface mb-2">
+                  <label htmlFor="ticket-desc" className="block text-xs font-bold text-on-surface mb-1.5">
                     Ticket Body / Description <span className="text-error">*</span>
                   </label>
                   <textarea
                     id="ticket-desc"
-                    rows={6}
+                    rows={5}
                     value={body}
                     onChange={(e) => {
                       setBody(e.target.value);
@@ -265,7 +265,7 @@ export const AnalyzeTicketView: React.FC = () => {
                       if (errorMessage) setErrorMessage(null);
                     }}
                     placeholder="Enter customer message, error trace, or email body..."
-                    className={`w-full px-4 py-3 rounded-xl bg-surface-container-low border transition-all text-sm text-on-surface placeholder:text-outline resize-none focus:outline-none ${
+                    className={`w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl bg-surface-container-low border transition-all text-sm text-on-surface placeholder:text-outline resize-none focus:outline-none ${
                       fieldErrors.body ? 'border-error focus:border-error' : 'border-outline-variant focus:border-primary'
                     }`}
                   ></textarea>
@@ -278,7 +278,7 @@ export const AnalyzeTicketView: React.FC = () => {
                   <button
                     type="button"
                     onClick={clearForm}
-                    className="px-4 py-2 bg-surface-container-low hover:bg-surface-container-high text-outline rounded-xl text-xs font-bold transition-all cursor-pointer"
+                    className="px-3.5 py-2 bg-surface-container-low hover:bg-surface-container-high text-outline rounded-xl text-xs font-bold transition-all cursor-pointer min-h-[36px]"
                   >
                     Clear Form
                   </button>
@@ -290,7 +290,7 @@ export const AnalyzeTicketView: React.FC = () => {
                 <button
                   type="submit"
                   disabled={isAnalyzing}
-                  className="w-full bg-primary text-on-primary py-4 rounded-xl font-button-label text-button-label hover:shadow-lg hover:opacity-95 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                  className="w-full bg-primary text-on-primary py-3.5 sm:py-4 rounded-xl font-bold text-xs sm:text-sm hover:shadow-lg hover:opacity-95 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 min-h-[48px] active:scale-[0.99]"
                 >
                   {isAnalyzing ? (
                     <>
@@ -307,53 +307,53 @@ export const AnalyzeTicketView: React.FC = () => {
               </form>
             </div>
 
-            <div className="mt-8 pt-4 border-t border-outline-variant flex items-center justify-between text-xs text-outline">
+            <div className="mt-6 sm:mt-8 pt-4 border-t border-outline-variant flex items-center justify-between text-[11px] sm:text-xs text-outline">
               <span className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-primary"></span> Server Proxy Gateway
+                <span className="w-2 h-2 rounded-full bg-primary"></span> Server Gateway Proxy
               </span>
               <span>JSON Schema Verified</span>
             </div>
           </div>
 
           {/* Results Panel */}
-          <div className="lg:col-span-7 bg-surface-container-lowest p-6 sm:p-8 rounded-3xl shadow-sm border border-outline-variant relative overflow-hidden flex flex-col justify-between min-h-[500px]">
+          <div className="lg:col-span-7 bg-surface-container-lowest p-4 sm:p-6 lg:p-8 rounded-3xl shadow-xs border border-outline-variant relative overflow-hidden flex flex-col justify-between min-h-[440px]">
             {!analysisResult ? (
               /* Empty State */
-              <div id="empty-state" className="flex flex-col items-center justify-center text-center my-auto py-12">
-                <div className="w-20 h-20 bg-primary/10 text-primary rounded-3xl flex items-center justify-center mb-4">
-                  <span className="material-symbols-outlined text-[40px]">smart_toy</span>
+              <div id="empty-state" className="flex flex-col items-center justify-center text-center my-auto py-10 sm:py-12">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-primary/10 text-primary rounded-3xl flex items-center justify-center mb-4">
+                  <span className="material-symbols-outlined text-[32px] sm:text-[40px]">smart_toy</span>
                 </div>
-                <h4 className="font-card-title text-card-title text-on-surface mb-2">Ready for AI Analysis</h4>
-                <p className="text-on-surface-variant text-sm max-w-md">
+                <h4 className="font-bold text-base sm:text-lg text-on-surface mb-2">Ready for AI Analysis</h4>
+                <p className="text-on-surface-variant text-xs sm:text-sm max-w-md">
                   Select a sample ticket above or type a subject and description to run real-time triage &amp; classification.
                 </p>
               </div>
             ) : (
               /* Result State */
-              <div id="result-state" className="space-y-6">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <div className="flex flex-wrap items-center gap-2 mb-2">
-                      <span className="px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-bold uppercase tracking-wider">
+              <div id="result-state" className="space-y-4 sm:space-y-6">
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                  <div className="flex-1">
+                    <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-2">
+                      <span className="px-2.5 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-[11px] sm:text-xs font-bold uppercase tracking-wider">
                         {analysisResult.category}
                       </span>
-                      <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${getUrgencyBadge(analysisResult.urgency)}`}>
+                      <span className={`px-2.5 sm:px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold uppercase tracking-wider ${getUrgencyBadge(analysisResult.urgency)}`}>
                         {analysisResult.urgency} Urgency
                       </span>
                       {needsHumanReview && (
-                        <span className="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-1">
+                        <span className="px-2.5 sm:px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-[11px] sm:text-xs font-bold uppercase tracking-wider flex items-center gap-1">
                           <span className="material-symbols-outlined text-[14px]">warning</span> Human Review
                         </span>
                       )}
                     </div>
-                    <h3 id="display-subject" className="font-card-title text-card-title text-on-surface">
+                    <h3 id="display-subject" className="font-bold text-base sm:text-lg text-on-surface">
                       {analysisResult.subject}
                     </h3>
                   </div>
 
                   {/* Confidence Gauge */}
-                  <div className="flex flex-col items-center shrink-0">
-                    <div className="relative w-20 h-20 flex items-center justify-center">
+                  <div className="flex items-center sm:flex-col gap-3 sm:gap-0 shrink-0 bg-surface-container-low sm:bg-transparent p-3 sm:p-0 rounded-2xl">
+                    <div className="relative w-16 h-16 sm:w-20 sm:h-20 flex items-center justify-center">
                       <svg className="w-full h-full transform -rotate-90" viewBox="0 0 80 80">
                         <circle cx="40" cy="40" r="34" stroke="#e2e8f0" strokeWidth="7" fill="transparent" />
                         <circle
@@ -368,27 +368,32 @@ export const AnalyzeTicketView: React.FC = () => {
                           className={`transition-all duration-700 ${getConfidenceColor(analysisResult.confidence)}`}
                         />
                       </svg>
-                      <span className={`absolute font-extrabold text-lg ${getConfidenceColor(analysisResult.confidence)}`}>
+                      <span className={`absolute font-extrabold text-base sm:text-lg ${getConfidenceColor(analysisResult.confidence)}`}>
                         {analysisResult.confidence}%
                       </span>
                     </div>
-                    <span className="text-[11px] text-outline font-bold mt-1">Confidence</span>
+                    <div className="sm:text-center">
+                      <span className="text-xs sm:text-[11px] text-outline font-bold block sm:mt-1">Confidence Score</span>
+                      <span className="text-[10px] text-primary font-medium sm:hidden">
+                        {analysisResult.confidence >= 90 ? 'High Precision' : 'Moderate'}
+                      </span>
+                    </div>
                   </div>
                 </div>
 
                 {/* Routing Destination Box */}
-                <div className="p-5 bg-surface-container-low rounded-2xl border border-outline-variant flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-primary/10 text-primary rounded-2xl flex items-center justify-center shrink-0">
-                      <span className="material-symbols-outlined text-[24px]">alt_route</span>
+                <div className="p-4 sm:p-5 bg-surface-container-low rounded-2xl border border-outline-variant flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+                  <div className="flex items-center gap-3 sm:gap-4">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary/10 text-primary rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0">
+                      <span className="material-symbols-outlined text-[20px] sm:text-[24px]">alt_route</span>
                     </div>
                     <div>
-                      <span className="text-xs text-outline block font-medium">Assigned Target Team</span>
-                      <span className="font-bold text-on-surface text-base sm:text-lg">{analysisResult.assignedTeam}</span>
+                      <span className="text-[11px] sm:text-xs text-outline block font-medium">Assigned Target Team</span>
+                      <span className="font-bold text-on-surface text-sm sm:text-base lg:text-lg">{analysisResult.assignedTeam}</span>
                     </div>
                   </div>
-                  <div className="text-left sm:text-right border-t sm:border-t-0 pt-2 sm:pt-0 border-outline-variant">
-                    <span className="text-xs text-outline block font-medium">Routing Status</span>
+                  <div className="text-left sm:text-right border-t sm:border-t-0 pt-2 sm:pt-0 border-outline-variant flex sm:flex-col justify-between sm:justify-start items-center sm:items-end">
+                    <span className="text-[11px] sm:text-xs text-outline block font-medium">Routing Status</span>
                     <span className={`text-xs font-bold px-2.5 py-1 rounded-full inline-block mt-0.5 ${
                       analysisResult.confidence >= 90
                         ? 'bg-emerald-100 text-emerald-800'
@@ -402,16 +407,16 @@ export const AnalyzeTicketView: React.FC = () => {
                 </div>
 
                 {/* Human Review Status Box */}
-                <div className="p-4 bg-surface-bright rounded-2xl border border-outline-variant flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-3">
-                    <span className={`material-symbols-outlined text-[22px] ${needsHumanReview ? 'text-amber-600' : 'text-emerald-600'}`}>
+                <div className="p-3.5 sm:p-4 bg-surface-bright rounded-2xl border border-outline-variant flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2.5 sm:gap-3">
+                    <span className={`material-symbols-outlined text-[20px] sm:text-[22px] shrink-0 ${needsHumanReview ? 'text-amber-600' : 'text-emerald-600'}`}>
                       {needsHumanReview ? 'warning' : 'check_circle'}
                     </span>
                     <div>
                       <span className="text-xs font-bold text-on-surface block">
                         {needsHumanReview ? 'Human Review Required' : '✓ Human Review Not Required'}
                       </span>
-                      <span className="text-[11px] text-outline">
+                      <span className="text-[10px] sm:text-[11px] text-outline line-clamp-1 sm:line-clamp-none">
                         {needsHumanReview
                           ? 'Flagged for human operator review (<70% confidence threshold or ambiguous context).'
                           : 'High confidence threshold met (≥90%). Automated routing approved.'}
@@ -425,19 +430,19 @@ export const AnalyzeTicketView: React.FC = () => {
                       onChange={() => setNeedsHumanReview(!needsHumanReview)}
                       className="sr-only peer"
                     />
-                    <div className="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                    <div className="w-10 h-5 sm:w-11 sm:h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 sm:after:h-5 sm:after:w-5 after:transition-all peer-checked:bg-primary"></div>
                   </label>
                 </div>
 
                 {/* AI Decision Rationale Box */}
                 <div className="border border-outline-variant rounded-2xl overflow-hidden bg-white shadow-2xs">
-                  <div className="w-full px-5 py-3.5 bg-surface-container-low border-b border-outline-variant flex items-center gap-2">
+                  <div className="w-full px-4 sm:px-5 py-3 bg-surface-container-low border-b border-outline-variant flex items-center gap-2">
                     <span className="material-symbols-outlined text-primary text-[18px]">psychology</span>
                     <span className="font-bold text-xs sm:text-sm text-on-surface">
                       AI Decision Rationale
                     </span>
                   </div>
-                  <div className="p-5 text-xs sm:text-sm text-on-surface bg-surface-bright">
+                  <div className="p-4 sm:p-5 text-xs sm:text-sm text-on-surface bg-surface-bright">
                     <p className="leading-relaxed text-on-surface">
                       {analysisResult.reason}
                     </p>
@@ -446,46 +451,46 @@ export const AnalyzeTicketView: React.FC = () => {
               </div>
             )}
 
-            <div className="pt-4 border-t border-outline-variant flex justify-between items-center text-xs text-outline mt-auto">
+            <div className="pt-4 border-t border-outline-variant flex justify-between items-center text-[11px] sm:text-xs text-outline mt-4 sm:mt-auto">
               <span>SupportFlow Triage v2</span>
-              <span>Analysis ID: {analysisResult ? analysisResult.id : 'N/A'}</span>
+              <span className="font-mono font-medium">Analysis ID: {analysisResult ? analysisResult.id : 'N/A'}</span>
             </div>
           </div>
         </div>
 
         {/* Pipeline Execution Lifecycle */}
-        <div className="bg-surface-container-lowest p-6 sm:p-8 rounded-3xl border border-outline-variant shadow-sm">
-          <h3 className="font-card-title text-card-title text-on-surface mb-6 flex items-center gap-2">
-            <span className="material-symbols-outlined text-primary">route</span> Triage Execution Lifecycle
+        <div className="bg-surface-container-lowest p-4 sm:p-6 lg:p-8 rounded-3xl border border-outline-variant shadow-xs">
+          <h3 className="font-bold text-base sm:text-lg text-on-surface mb-4 sm:mb-6 flex items-center gap-2">
+            <span className="material-symbols-outlined text-primary text-[20px]">route</span> Triage Execution Lifecycle
           </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="p-4 bg-surface-container-low rounded-2xl border border-outline-variant">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            <div className="p-3.5 sm:p-4 bg-surface-container-low rounded-2xl border border-outline-variant">
               <span className="text-[10px] font-bold text-outline uppercase block mb-1">STAGE 01</span>
-              <span className="font-bold text-on-surface text-sm block mb-1">Ticket Ingestion</span>
-              <p className="text-xs text-on-surface-variant">Inbound message payload parsed by backend REST route.</p>
+              <span className="font-bold text-on-surface text-xs sm:text-sm block mb-1">Ticket Ingestion</span>
+              <p className="text-[11px] sm:text-xs text-on-surface-variant">Inbound message payload parsed by backend REST route.</p>
             </div>
-            <div className={`p-4 rounded-2xl border transition-colors ${
+            <div className={`p-3.5 sm:p-4 rounded-2xl border transition-colors ${
               analysisResult ? 'bg-primary/10 border-primary/40' : 'bg-surface-container-low border-outline-variant'
             }`}>
               <span className="text-[10px] font-bold text-outline uppercase block mb-1">STAGE 02</span>
-              <span className="font-bold text-on-surface text-sm block mb-1">AI Intent Analysis</span>
-              <p className="text-xs text-on-surface-variant">Intent extraction, sentiment &amp; priority evaluated.</p>
+              <span className="font-bold text-on-surface text-xs sm:text-sm block mb-1">AI Intent Analysis</span>
+              <p className="text-[11px] sm:text-xs text-on-surface-variant">Intent extraction, sentiment &amp; priority evaluated.</p>
             </div>
-            <div className={`p-4 rounded-2xl border transition-colors ${
+            <div className={`p-3.5 sm:p-4 rounded-2xl border transition-colors ${
               analysisResult ? 'bg-primary/10 border-primary/40' : 'bg-surface-container-low border-outline-variant'
             }`}>
               <span className="text-[10px] font-bold text-outline uppercase block mb-1">STAGE 03</span>
-              <span className="font-bold text-on-surface text-sm block mb-1">Confidence Check</span>
-              <p className="text-xs text-on-surface-variant">
+              <span className="font-bold text-on-surface text-xs sm:text-sm block mb-1">Confidence Check</span>
+              <p className="text-[11px] sm:text-xs text-on-surface-variant">
                 {analysisResult ? `${analysisResult.confidence}% confidence calculated.` : 'Decision boundary evaluated.'}
               </p>
             </div>
-            <div className={`p-4 rounded-2xl border transition-colors ${
+            <div className={`p-3.5 sm:p-4 rounded-2xl border transition-colors ${
               analysisResult ? 'bg-primary/10 border-primary/40' : 'bg-surface-container-low border-outline-variant'
             }`}>
               <span className="text-[10px] font-bold text-outline uppercase block mb-1">STAGE 04</span>
-              <span className="font-bold text-on-surface text-sm block mb-1">Team Dispatch</span>
-              <p className="text-xs text-on-surface-variant">
+              <span className="font-bold text-on-surface text-xs sm:text-sm block mb-1">Team Dispatch</span>
+              <p className="text-[11px] sm:text-xs text-on-surface-variant">
                 {analysisResult ? `Routed to ${analysisResult.assignedTeam}.` : 'Assigned to target team queue.'}
               </p>
             </div>

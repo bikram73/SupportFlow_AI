@@ -160,7 +160,7 @@ export const BatchProcessingView: React.FC = () => {
   const handleParsePastedText = () => {
     if (!customText.trim()) return;
     const lines = customText.split('\n').filter((l) => l.trim().length > 0);
-    const parsed = lines.map((line, idx) => {
+    const parsed = lines.map((line) => {
       const parts = line.split('|');
       if (parts.length >= 2) {
         return { subject: parts[0].trim(), body: parts[1].trim() };
@@ -267,23 +267,23 @@ export const BatchProcessingView: React.FC = () => {
 
   return (
     <div id="batch-view" className="w-full">
-      <div className="max-w-container-max-width mx-auto px-margin-desktop py-8">
+      <div className="max-w-container-max-width mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-8">
         {/* Header */}
-        <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="mb-6 sm:mb-8 flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4">
           <div>
-            <h1 className="font-section-title text-section-title text-on-surface mb-1">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-on-surface tracking-tight mb-1">
               Batch Ticket Processing Engine
             </h1>
-            <p className="text-on-surface-variant text-sm">
+            <p className="text-on-surface-variant text-xs sm:text-sm">
               Process datasets of support tickets simultaneously with automated AI triage.
             </p>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5 sm:gap-2">
             <button
               type="button"
               onClick={loadPredefinedBatch}
               disabled={isProcessing}
-              className="px-4 py-2 bg-surface-container-high hover:bg-surface-container-highest text-on-surface rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5"
+              className="px-3 sm:px-4 py-2 bg-surface-container-high hover:bg-surface-container-highest text-on-surface rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5"
             >
               <span className="material-symbols-outlined text-[16px]">refresh</span> Reset Standard Batch
             </button>
@@ -291,7 +291,7 @@ export const BatchProcessingView: React.FC = () => {
               type="button"
               onClick={() => handleGenerateSamples(10)}
               disabled={isProcessing}
-              className="px-4 py-2 bg-primary text-on-primary rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
+              className="px-3 sm:px-4 py-2 bg-primary text-on-primary rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-xs"
             >
               <span className="material-symbols-outlined text-[16px]">auto_awesome</span> Generate 10 AI Tickets
             </button>
@@ -299,7 +299,7 @@ export const BatchProcessingView: React.FC = () => {
               type="button"
               onClick={() => handleGenerateSamples(20)}
               disabled={isProcessing}
-              className="px-4 py-2 bg-tertiary text-on-tertiary rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5"
+              className="px-3 sm:px-4 py-2 bg-tertiary text-on-tertiary rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5"
             >
               <span className="material-symbols-outlined text-[16px]">add_circle</span> Generate 20 AI Tickets
             </button>
@@ -307,58 +307,58 @@ export const BatchProcessingView: React.FC = () => {
         </div>
 
         {/* Top Metric KPI Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
-          <div className="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant shadow-sm">
-            <span className="text-xs font-bold text-outline block mb-1">Total Tickets</span>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 mb-6 sm:mb-8">
+          <div className="bg-surface-container-lowest p-3.5 sm:p-5 rounded-2xl border border-outline-variant shadow-xs">
+            <span className="text-[11px] sm:text-xs font-bold text-outline block mb-1">Total Tickets</span>
             <div className="flex items-baseline justify-between">
-              <span className="text-3xl font-extrabold text-on-surface">{totalCount}</span>
-              <span className="text-xs font-bold text-secondary bg-secondary-container/30 px-2 py-0.5 rounded-full">
+              <span className="text-2xl sm:text-3xl font-extrabold text-on-surface">{totalCount}</span>
+              <span className="text-[10px] sm:text-xs font-bold text-secondary bg-secondary-container/30 px-1.5 py-0.5 rounded-full">
                 Active Batch
               </span>
             </div>
-            <span className="text-[11px] text-outline mt-1.5 block">Analyzed by AI</span>
+            <span className="text-[10px] sm:text-[11px] text-outline mt-1 block">Analyzed by AI</span>
           </div>
 
-          <div className="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant shadow-sm">
-            <span className="text-xs font-bold text-outline block mb-1">Critical Priority</span>
+          <div className="bg-surface-container-lowest p-3.5 sm:p-5 rounded-2xl border border-outline-variant shadow-xs">
+            <span className="text-[11px] sm:text-xs font-bold text-outline block mb-1">Critical Priority</span>
             <div className="flex items-baseline justify-between">
-              <span className="text-3xl font-extrabold text-error">{criticalCount}</span>
-              <span className="text-[11px] font-bold text-error bg-error-container/30 px-2 py-0.5 rounded-full">
+              <span className="text-2xl sm:text-3xl font-extrabold text-error">{criticalCount}</span>
+              <span className="text-[10px] sm:text-[11px] font-bold text-error bg-error-container/30 px-1.5 py-0.5 rounded-full">
                 Immediate SLA
               </span>
             </div>
-            <span className="text-[11px] text-outline mt-1.5 block">System Outage / Critical</span>
+            <span className="text-[10px] sm:text-[11px] text-outline mt-1 block">System Outage</span>
           </div>
 
-          <div className="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant shadow-sm">
-            <span className="text-xs font-bold text-outline block mb-1">High Priority</span>
+          <div className="bg-surface-container-lowest p-3.5 sm:p-5 rounded-2xl border border-outline-variant shadow-xs">
+            <span className="text-[11px] sm:text-xs font-bold text-outline block mb-1">High Priority</span>
             <div className="flex items-baseline justify-between">
-              <span className="text-3xl font-extrabold text-amber-700">{highCount}</span>
-              <span className="text-[11px] font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full">
-                Tier-2 Escalation
+              <span className="text-2xl sm:text-3xl font-extrabold text-amber-700">{highCount}</span>
+              <span className="text-[10px] sm:text-[11px] font-bold text-amber-800 bg-amber-100 px-1.5 py-0.5 rounded-full">
+                Escalation
               </span>
             </div>
-            <span className="text-[11px] text-outline mt-1.5 block">Software Bugs / Crashes</span>
+            <span className="text-[10px] sm:text-[11px] text-outline mt-1 block">Software Bugs</span>
           </div>
 
-          <div className="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant shadow-sm">
-            <span className="text-xs font-bold text-outline block mb-1">Needs Human Review</span>
+          <div className="bg-surface-container-lowest p-3.5 sm:p-5 rounded-2xl border border-outline-variant shadow-xs">
+            <span className="text-[11px] sm:text-xs font-bold text-outline block mb-1">Human Review</span>
             <div className="flex items-baseline justify-between">
-              <span className="text-3xl font-extrabold text-tertiary">{needsReviewCount}</span>
-              <span className="text-[11px] font-bold text-tertiary bg-tertiary-fixed/40 px-2 py-0.5 rounded-full">
-                &lt; 70% Conf
+              <span className="text-2xl sm:text-3xl font-extrabold text-tertiary">{needsReviewCount}</span>
+              <span className="text-[10px] sm:text-[11px] font-bold text-tertiary bg-tertiary-fixed/40 px-1.5 py-0.5 rounded-full">
+                &lt; 70%
               </span>
             </div>
-            <span className="text-[11px] text-outline mt-1.5 block">Ambiguous / Multi-issue</span>
+            <span className="text-[10px] sm:text-[11px] text-outline mt-1 block">Ambiguous</span>
           </div>
 
-          <div className="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant shadow-sm ai-gradient-border">
-            <span className="text-xs font-bold text-outline block mb-1">Avg Confidence</span>
+          <div className="col-span-2 sm:col-span-1 bg-surface-container-lowest p-3.5 sm:p-5 rounded-2xl border border-outline-variant shadow-xs ai-gradient-border">
+            <span className="text-[11px] sm:text-xs font-bold text-outline block mb-1">Avg Confidence</span>
             <div className="flex items-baseline justify-between">
-              <span className="text-3xl font-extrabold text-primary">{avgConfidence}%</span>
+              <span className="text-2xl sm:text-3xl font-extrabold text-primary">{avgConfidence}%</span>
               <span className="material-symbols-outlined text-primary text-[20px]">auto_awesome</span>
             </div>
-            <span className="text-[11px] text-outline mt-1.5 block">AI Confidence Score</span>
+            <span className="text-[10px] sm:text-[11px] text-outline mt-1 block">AI Confidence Score</span>
           </div>
         </div>
 
@@ -366,25 +366,25 @@ export const BatchProcessingView: React.FC = () => {
         {isProcessing && (
           <div className="mb-6 p-4 bg-primary/10 border border-primary/30 rounded-2xl flex items-center gap-3 animate-pulse">
             <span className="material-symbols-outlined text-primary animate-spin">sync</span>
-            <span className="text-sm font-bold text-primary">{processingStatus || 'Processing batch...'}</span>
+            <span className="text-xs sm:text-sm font-bold text-primary">{processingStatus || 'Processing batch...'}</span>
           </div>
         )}
 
         {/* Main Content Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8">
           {/* Controls Side Column */}
           <div className="lg:col-span-4 space-y-6">
-            <div className="bg-surface-container-lowest p-6 rounded-3xl border border-outline-variant shadow-sm">
-              <h3 className="font-card-title text-card-title text-on-surface mb-4">Input &amp; Batch Methods</h3>
+            <div className="bg-surface-container-lowest p-4 sm:p-6 rounded-3xl border border-outline-variant shadow-xs">
+              <h3 className="font-bold text-base sm:text-lg text-on-surface mb-3 sm:mb-4">Input &amp; Batch Methods</h3>
 
               {/* Upload Dropzone */}
-              <label className="border-2 border-dashed border-outline-variant hover:border-primary transition-colors rounded-2xl p-6 text-center bg-surface-container-low cursor-pointer block mb-4 group">
+              <label className="border-2 border-dashed border-outline-variant hover:border-primary transition-colors rounded-2xl p-4 sm:p-6 text-center bg-surface-container-low cursor-pointer block mb-3 sm:mb-4 group">
                 <input type="file" accept=".csv,.txt" onChange={handleFileUpload} className="hidden" />
-                <div className="w-12 h-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:scale-105 transition-transform">
-                  <span className="material-symbols-outlined text-[28px]">cloud_upload</span>
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary/10 text-primary rounded-xl flex items-center justify-center mx-auto mb-2 sm:mb-3 group-hover:scale-105 transition-transform">
+                  <span className="material-symbols-outlined text-[24px] sm:text-[28px]">cloud_upload</span>
                 </div>
-                <h4 className="font-bold text-on-surface text-sm mb-1">Upload CSV File</h4>
-                <p className="text-xs text-outline mb-2">Drag &amp; drop CSV file with Subject, Body columns</p>
+                <h4 className="font-bold text-on-surface text-xs sm:text-sm mb-0.5 sm:mb-1">Upload CSV File</h4>
+                <p className="text-[11px] text-outline mb-2">Subject, Body columns</p>
                 <span className="inline-block px-3 py-1.5 bg-white text-primary border border-primary/20 rounded-xl text-xs font-bold shadow-2xs">
                   Browse Files
                 </span>
@@ -394,18 +394,18 @@ export const BatchProcessingView: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowPasteModal(true)}
-                className="w-full bg-surface-container-low hover:bg-surface-container-high border border-outline-variant text-on-surface py-3 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-2 cursor-pointer mb-3"
+                className="w-full bg-surface-container-low hover:bg-surface-container-high border border-outline-variant text-on-surface py-2.5 sm:py-3 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-2 cursor-pointer mb-3"
               >
                 <span className="material-symbols-outlined text-[18px]">content_paste</span>
                 Paste Multiple Tickets
               </button>
 
               {/* Filter Section */}
-              <div className="pt-4 border-t border-outline-variant space-y-3">
-                <h4 className="text-xs font-bold text-on-surface uppercase tracking-wider">Filter Results</h4>
+              <div className="pt-3 sm:pt-4 border-t border-outline-variant space-y-2.5 sm:space-y-3">
+                <h4 className="text-[11px] font-bold text-on-surface uppercase tracking-wider">Filter Results</h4>
 
                 <div>
-                  <label className="text-[11px] font-bold text-outline block mb-1">Category</label>
+                  <label className="text-[10px] sm:text-[11px] font-bold text-outline block mb-1">Category</label>
                   <select
                     value={categoryFilter}
                     onChange={(e) => setCategoryFilter(e.target.value)}
@@ -425,7 +425,7 @@ export const BatchProcessingView: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="text-[11px] font-bold text-outline block mb-1">Urgency</label>
+                  <label className="text-[10px] sm:text-[11px] font-bold text-outline block mb-1">Urgency</label>
                   <select
                     value={urgencyFilter}
                     onChange={(e) => setUrgencyFilter(e.target.value)}
@@ -440,7 +440,7 @@ export const BatchProcessingView: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="text-[11px] font-bold text-outline block mb-1">Review Status</label>
+                  <label className="text-[10px] sm:text-[11px] font-bold text-outline block mb-1">Review Status</label>
                   <select
                     value={reviewFilter}
                     onChange={(e) => setReviewFilter(e.target.value)}
@@ -456,26 +456,26 @@ export const BatchProcessingView: React.FC = () => {
           </div>
 
           {/* Results Table Side */}
-          <div className="lg:col-span-8 bg-surface-container-lowest p-6 sm:p-8 rounded-3xl border border-outline-variant shadow-sm flex flex-col justify-between">
+          <div className="lg:col-span-8 bg-surface-container-lowest p-4 sm:p-6 lg:p-8 rounded-3xl border border-outline-variant shadow-xs flex flex-col justify-between">
             <div>
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
                 <div>
-                  <h3 className="font-card-title text-card-title text-on-surface">Batch Results</h3>
-                  <span className="text-xs text-outline">
+                  <h3 className="font-bold text-base sm:text-lg text-on-surface">Batch Results</h3>
+                  <span className="text-[11px] sm:text-xs text-outline">
                     Showing {filteredTickets.length} of {tickets.length} tickets
                   </span>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <div className="relative">
+                  <div className="relative flex-1 sm:flex-none">
                     <input
                       type="text"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      placeholder="Search tickets..."
-                      className="pl-8 pr-3 py-2 bg-surface-container-low border border-outline-variant rounded-xl text-xs text-on-surface focus:outline-none focus:border-primary w-36 sm:w-48"
+                      placeholder="Search..."
+                      className="pl-8 pr-3 py-1.5 sm:py-2 bg-surface-container-low border border-outline-variant rounded-xl text-xs text-on-surface focus:outline-none focus:border-primary w-full sm:w-44"
                     />
-                    <span className="material-symbols-outlined absolute left-2.5 top-2 text-outline text-[16px]">
+                    <span className="material-symbols-outlined absolute left-2.5 top-1.5 sm:top-2 text-outline text-[16px]">
                       search
                     </span>
                   </div>
@@ -484,7 +484,7 @@ export const BatchProcessingView: React.FC = () => {
                     type="button"
                     onClick={exportCSV}
                     title="Export CSV"
-                    className="px-3 py-2 bg-surface-container-high hover:bg-surface-container-highest text-on-surface rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1"
+                    className="px-2.5 sm:px-3 py-1.5 sm:py-2 bg-surface-container-high hover:bg-surface-container-highest text-on-surface rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1"
                   >
                     <span className="material-symbols-outlined text-[16px]">download</span> CSV
                   </button>
@@ -493,7 +493,7 @@ export const BatchProcessingView: React.FC = () => {
                     type="button"
                     onClick={exportJSON}
                     title="Export JSON"
-                    className="px-3 py-2 bg-surface-container-high hover:bg-surface-container-highest text-on-surface rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1"
+                    className="px-2.5 sm:px-3 py-1.5 sm:py-2 bg-surface-container-high hover:bg-surface-container-highest text-on-surface rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1"
                   >
                     <span className="material-symbols-outlined text-[16px]">code</span> JSON
                   </button>
@@ -501,38 +501,38 @@ export const BatchProcessingView: React.FC = () => {
               </div>
 
               {/* Data Table */}
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
+              <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
+                <table className="w-full text-left border-collapse min-w-[560px]">
                   <thead>
                     <tr className="border-b border-outline-variant text-[11px] text-outline font-bold uppercase tracking-wider">
-                      <th className="py-3 px-3">Ticket</th>
-                      <th className="py-3 px-3">Category</th>
-                      <th className="py-3 px-3">Urgency</th>
-                      <th className="py-3 px-3">Confidence</th>
-                      <th className="py-3 px-3">Assigned Team</th>
-                      <th className="py-3 px-3 text-right">Human Review</th>
+                      <th className="py-2.5 sm:py-3 px-2 sm:px-3">Ticket ID &amp; Subject</th>
+                      <th className="py-2.5 sm:py-3 px-2 sm:px-3">Category</th>
+                      <th className="py-2.5 sm:py-3 px-2 sm:px-3">Urgency</th>
+                      <th className="py-2.5 sm:py-3 px-2 sm:px-3">Confidence</th>
+                      <th className="py-2.5 sm:py-3 px-2 sm:px-3">Target Team</th>
+                      <th className="py-2.5 sm:py-3 px-2 sm:px-3 text-right">Human Review</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-outline-variant/60 text-xs sm:text-sm">
                     {paginatedTickets.length === 0 ? (
                       <tr>
-                        <td colSpan={6} className="py-12 text-center text-outline">
+                        <td colSpan={6} className="py-10 text-center text-outline text-xs">
                           No tickets found matching your search and filter criteria.
                         </td>
                       </tr>
                     ) : (
                       paginatedTickets.map((t) => (
                         <tr key={t.id} className="hover:bg-surface-container-low/60 transition-colors">
-                          <td className="py-3.5 px-3">
-                            <span className="font-bold text-primary block">{t.id}</span>
-                            <span className="text-xs text-on-surface max-w-xs block truncate" title={t.subject}>
+                          <td className="py-3 px-2 sm:px-3">
+                            <span className="font-mono font-bold text-primary block text-[11px] sm:text-xs">{t.id}</span>
+                            <span className="text-xs text-on-surface max-w-[200px] sm:max-w-xs block truncate" title={t.subject}>
                               {t.subject}
                             </span>
                           </td>
-                          <td className="py-3.5 px-3 font-medium text-on-surface">{t.category}</td>
-                          <td className="py-3.5 px-3">
+                          <td className="py-3 px-2 sm:px-3 font-medium text-on-surface text-xs">{t.category}</td>
+                          <td className="py-3 px-2 sm:px-3">
                             <span
-                              className={`px-2 py-0.5 rounded-full text-[11px] font-bold uppercase ${
+                              className={`px-2 py-0.5 rounded-full text-[10px] sm:text-[11px] font-bold uppercase ${
                                 t.urgency === 'Critical'
                                   ? 'bg-error-container text-on-error-container'
                                   : t.urgency === 'High'
@@ -545,9 +545,9 @@ export const BatchProcessingView: React.FC = () => {
                               {t.urgency}
                             </span>
                           </td>
-                          <td className="py-3.5 px-3">
-                            <div className="flex items-center gap-2">
-                              <div className="w-14 bg-surface-container-high rounded-full h-2 overflow-hidden">
+                          <td className="py-3 px-2 sm:px-3">
+                            <div className="flex items-center gap-1.5 sm:gap-2">
+                              <div className="w-10 sm:w-14 bg-surface-container-high rounded-full h-1.5 sm:h-2 overflow-hidden">
                                 <div
                                   className={`h-full rounded-full ${
                                     t.confidence >= 90
@@ -559,19 +559,19 @@ export const BatchProcessingView: React.FC = () => {
                                   style={{ width: `${t.confidence}%` }}
                                 ></div>
                               </div>
-                              <span className="text-xs font-bold text-on-surface">{t.confidence}%</span>
+                              <span className="text-[11px] sm:text-xs font-bold text-on-surface">{t.confidence}%</span>
                             </div>
                           </td>
-                          <td className="py-3.5 px-3 text-on-surface font-medium">{t.assignedTeam}</td>
-                          <td className="py-3.5 px-3 text-right">
+                          <td className="py-3 px-2 sm:px-3 text-on-surface font-medium text-xs">{t.assignedTeam}</td>
+                          <td className="py-3 px-2 sm:px-3 text-right">
                             <span
-                              className={`inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full ${
+                              className={`inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-bold px-2 py-0.5 rounded-full ${
                                 t.humanReview
                                   ? 'bg-amber-100 text-amber-800'
                                   : 'bg-emerald-100 text-emerald-800'
                               }`}
                             >
-                              <span className="material-symbols-outlined text-[13px]">
+                              <span className="material-symbols-outlined text-[12px]">
                                 {t.humanReview ? 'warning' : 'check_circle'}
                               </span>
                               {t.humanReview ? 'Yes (<70%)' : 'No (Auto)'}
@@ -586,16 +586,16 @@ export const BatchProcessingView: React.FC = () => {
             </div>
 
             {/* Pagination Controls */}
-            <div className="pt-6 border-t border-outline-variant flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-outline mt-6">
-              <span>
+            <div className="pt-4 sm:pt-6 border-t border-outline-variant flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-outline mt-4 sm:mt-6">
+              <span className="text-[11px] sm:text-xs">
                 Page {currentPage} of {totalPages} ({filteredTickets.length} items)
               </span>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 sm:gap-2">
                 <button
                   type="button"
                   onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                   disabled={currentPage === 1}
-                  className="px-3 py-1.5 rounded-lg border border-outline-variant bg-surface-container-low text-on-surface hover:bg-surface-container-high disabled:opacity-40 cursor-pointer"
+                  className="px-2.5 sm:px-3 py-1.5 rounded-lg border border-outline-variant bg-surface-container-low text-on-surface hover:bg-surface-container-high disabled:opacity-40 cursor-pointer text-xs"
                 >
                   Previous
                 </button>
@@ -604,7 +604,7 @@ export const BatchProcessingView: React.FC = () => {
                     key={page}
                     type="button"
                     onClick={() => setCurrentPage(page)}
-                    className={`px-3 py-1.5 rounded-lg font-bold cursor-pointer ${
+                    className={`px-2.5 sm:px-3 py-1.5 rounded-lg font-bold cursor-pointer text-xs ${
                       currentPage === page ? 'bg-primary text-on-primary' : 'bg-surface-container-low text-on-surface'
                     }`}
                   >
@@ -615,7 +615,7 @@ export const BatchProcessingView: React.FC = () => {
                   type="button"
                   onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                   disabled={currentPage === totalPages}
-                  className="px-3 py-1.5 rounded-lg border border-outline-variant bg-surface-container-low text-on-surface hover:bg-surface-container-high disabled:opacity-40 cursor-pointer"
+                  className="px-2.5 sm:px-3 py-1.5 rounded-lg border border-outline-variant bg-surface-container-low text-on-surface hover:bg-surface-container-high disabled:opacity-40 cursor-pointer text-xs"
                 >
                   Next
                 </button>
@@ -627,33 +627,33 @@ export const BatchProcessingView: React.FC = () => {
 
       {/* Paste Modal */}
       {showPasteModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-          <div className="bg-surface-container-lowest p-6 rounded-3xl max-w-lg w-full border border-outline-variant shadow-2xl space-y-4">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-in fade-in duration-150">
+          <div className="bg-surface-container-lowest p-4 sm:p-6 rounded-3xl max-w-lg w-full border border-outline-variant shadow-2xl space-y-3 sm:space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between">
-              <h3 className="font-bold text-on-surface text-base">Paste Multiple Tickets</h3>
+              <h3 className="font-bold text-on-surface text-sm sm:text-base">Paste Multiple Tickets</h3>
               <button
                 type="button"
                 onClick={() => setShowPasteModal(false)}
-                className="text-outline hover:text-on-surface cursor-pointer"
+                className="text-outline hover:text-on-surface cursor-pointer p-1"
               >
-                <span className="material-symbols-outlined">close</span>
+                <span className="material-symbols-outlined text-[20px]">close</span>
               </button>
             </div>
             <p className="text-xs text-outline">
-              Format: Each line as "Subject | Body description" or simply one ticket description per line.
+              Format: Each line as "Subject | Body description" or one ticket description per line.
             </p>
             <textarea
-              rows={8}
+              rows={6}
               value={customText}
               onChange={(e) => setCustomText(e.target.value)}
               placeholder={`Cannot login | I reset my password but I cannot access my account.\nRefund request | I was charged twice this month.\nApp crashes | Uploading PDF crashes browser.`}
-              className="w-full p-3 bg-surface-container-low border border-outline-variant rounded-xl text-xs text-on-surface focus:outline-none focus:border-primary font-mono"
+              className="w-full p-3 bg-surface-container-low border border-outline-variant rounded-xl text-xs text-on-surface focus:outline-none focus:border-primary font-mono resize-none"
             ></textarea>
-            <div className="flex justify-end gap-3 pt-2">
+            <div className="flex justify-end gap-2 pt-2">
               <button
                 type="button"
                 onClick={() => setShowPasteModal(false)}
-                className="px-4 py-2 bg-surface-container-low text-on-surface rounded-xl text-xs font-bold hover:bg-surface-container-high cursor-pointer"
+                className="px-3.5 py-2 bg-surface-container-low text-on-surface rounded-xl text-xs font-bold hover:bg-surface-container-high cursor-pointer"
               >
                 Cancel
               </button>

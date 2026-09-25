@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { NavTab } from './types';
 import { Navbar } from './components/Navbar';
+import { MobileBottomNav } from './components/MobileBottomNav';
 import { HomeView } from './components/HomeView';
 import { AnalyzeTicketView } from './components/AnalyzeTicketView';
 import { BatchProcessingView } from './components/BatchProcessingView';
@@ -16,12 +17,12 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-surface text-on-surface flex flex-col font-sans antialiased">
-      {/* Top Fixed Header Bar */}
+    <div className="min-h-screen bg-surface text-on-surface flex flex-col font-sans antialiased selection:bg-primary/20 selection:text-primary">
+      {/* Top Header Navigation */}
       <Navbar currentTab={currentTab} onSelectTab={setCurrentTab} />
 
-      {/* Main Screen Content Area */}
-      <main className="flex-1 w-full">
+      {/* Main View Area with Mobile Bottom Nav Padding */}
+      <main className="flex-1 w-full pb-18 lg:pb-0 overflow-x-hidden">
         {currentTab === 'home' && (
           <HomeView onSelectTab={setCurrentTab} onTrySample={handleTrySample} />
         )}
@@ -46,6 +47,9 @@ export default function App() {
           <AboutView onSelectTab={setCurrentTab} />
         )}
       </main>
+
+      {/* Floating Mobile Bottom Navigation Bar */}
+      <MobileBottomNav currentTab={currentTab} onSelectTab={setCurrentTab} />
     </div>
   );
 }
