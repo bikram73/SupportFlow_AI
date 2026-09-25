@@ -114,7 +114,7 @@ export const QAValidationView: React.FC = () => {
         testCase: tc,
         actualResult,
         passed,
-        notes: passed ? 'All PRD assertions passed.' : failureReasons.join('; '),
+        notes: passed ? 'All validation checks passed.' : failureReasons.join('; '),
         latencyMs
       });
 
@@ -156,7 +156,7 @@ export const QAValidationView: React.FC = () => {
     md += `**Environment:** Node/Express + React + Gemini 3.6 Flash / Rule Engine\n`;
     md += `**Overall Result:** ${passed === total ? '🟢 PASS (100%)' : '🟡 CONDITIONAL PASS'}\n\n`;
     md += `## Executive Scorecard\n\n`;
-    md += `| Test Metric | Value | PRD Target | Status |\n`;
+    md += `| Test Metric | Value | Benchmark Target | Status |\n`;
     md += `| :--- | :--- | :--- | :--- |\n`;
     md += `| Total Tests Executed | ${total} | ≥ 25 | ✅ PASS |\n`;
     md += `| Passed Tests | ${passed} / ${total} | 100% | ${passed === total ? '✅ PASS' : '⚠️ REVIEW'} |\n`;
@@ -201,7 +201,7 @@ export const QAValidationView: React.FC = () => {
         <div className="mb-6 sm:mb-8 flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4">
           <div>
             <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full mb-2.5 text-xs font-bold">
-              <span className="material-symbols-outlined text-[16px]">verified</span> PRD QA &amp; Hardening Suite v1.0
+              <span className="material-symbols-outlined text-[16px]">verified</span> QA &amp; Hardening Suite v1.0
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-on-surface tracking-tight mb-1">
               End-to-End QA Validation &amp; Verification
@@ -270,7 +270,7 @@ export const QAValidationView: React.FC = () => {
           </div>
 
           <div className="col-span-2 sm:col-span-1 bg-surface-container-lowest p-3.5 sm:p-5 rounded-2xl border border-outline-variant shadow-xs ai-gradient-border">
-            <span className="text-[11px] sm:text-xs font-bold text-outline block mb-1">PRD Pass Score</span>
+            <span className="text-[11px] sm:text-xs font-bold text-outline block mb-1">Validation Score</span>
             <div className="text-2xl sm:text-3xl font-extrabold text-primary flex items-center justify-between">
               {passRate}%
               <span className="material-symbols-outlined text-[20px] text-emerald-600">check_circle</span>
@@ -290,7 +290,7 @@ export const QAValidationView: React.FC = () => {
             <span className="text-[11px] sm:text-xs text-outline font-medium">Verify 69% / 70% / 89% / 90% Rules</span>
           </div>
           <p className="text-xs text-on-surface-variant mb-4 sm:mb-6 leading-relaxed">
-            Audit the three core PRD rules: <strong>Rule A (≥90% Auto-Routed)</strong>, <strong>Rule B (70–89% Recommended)</strong>, and <strong>Rule C (&lt;70% Human Review)</strong>.
+            Audit the three core decision rules: <strong>Rule A (≥90% Auto-Routed)</strong>, <strong>Rule B (70–89% Recommended)</strong>, and <strong>Rule C (&lt;70% Human Review)</strong>.
           </p>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6">
