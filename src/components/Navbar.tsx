@@ -13,9 +13,15 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, onSelectTab }) => {
         <div className="flex items-center gap-8">
           <span 
             onClick={() => onSelectTab('home')}
-            className="font-card-title text-card-title text-primary cursor-pointer select-none"
+            className="inline-flex items-center gap-2.5 font-card-title text-card-title text-primary cursor-pointer select-none group"
           >
-            SupportFlow AI
+            <span className="w-8 h-8 rounded-xl bg-gradient-to-tr from-primary via-blue-600 to-sky-400 flex items-center justify-center text-white shadow-sm shadow-primary/25 ring-1 ring-primary/20 group-hover:scale-105 group-hover:shadow-md transition-all duration-200">
+              <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
+                <path d="m9 12 2 2 4-4" />
+              </svg>
+            </span>
+            <span className="font-bold tracking-tight">SupportFlow AI</span>
           </span>
           <nav className="hidden md:flex items-center gap-6">
             <button
