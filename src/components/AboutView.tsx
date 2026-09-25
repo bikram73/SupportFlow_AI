@@ -28,7 +28,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ onSelectTab }) => {
               Enterprise Grade SLA
             </span>
             <span className="px-3 py-1 bg-primary-container/20 text-primary rounded-full text-xs font-bold">
-              Gemini Pro Powered
+              AI-Powered Engine
             </span>
           </div>
         </div>
@@ -61,7 +61,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ onSelectTab }) => {
             </div>
             <h3 className="font-card-title text-card-title text-on-surface mb-3">Decision Orchestration</h3>
             <p className="text-on-surface-variant text-sm leading-relaxed">
-              Gemini Pro acts as a high-speed routing layer, evaluating semantic intent and outputting strict JSON for seamless CRM dispatch.
+              SupportFlow AI acts as a high-speed routing layer, evaluating semantic intent and outputting strict JSON for seamless CRM dispatch.
             </p>
           </div>
         </div>
@@ -115,10 +115,10 @@ export const AboutView: React.FC<AboutViewProps> = ({ onSelectTab }) => {
           </div>
         </div>
 
-        {/* How Gemini AI Works Section */}
+        {/* How AI Triage Works Section */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-16">
           <div className="lg:col-span-6 space-y-6">
-            <h2 className="font-section-title text-section-title text-on-surface">How Gemini AI Works Under the Hood</h2>
+            <h2 className="font-section-title text-section-title text-on-surface">How the AI Engine Works Under the Hood</h2>
             <div className="space-y-4">
               <div className="p-4 bg-surface-container-lowest rounded-2xl border border-outline-variant shadow-sm flex gap-4">
                 <span className="w-8 h-8 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center shrink-0">
@@ -139,7 +139,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ onSelectTab }) => {
                 <div>
                   <h4 className="font-bold text-on-surface mb-1">Multi-Agent Triage</h4>
                   <p className="text-xs text-on-surface-variant">
-                    Gemini Pro evaluates category probabilities against your custom enterprise taxonomy rules in real-time.
+                    The triage engine evaluates category probabilities against your custom enterprise taxonomy rules in real-time.
                   </p>
                 </div>
               </div>
@@ -172,7 +172,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ onSelectTab }) => {
               </div>
               <div>
                 <span className="text-xs font-bold text-on-surface block">0.8s Avg Processing Time</span>
-                <span className="text-[10px] text-outline">Optimized Gemini Pro Stream</span>
+                <span className="text-[10px] text-outline">Optimized Inference Stream</span>
               </div>
             </div>
           </div>
@@ -211,7 +211,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ onSelectTab }) => {
             <span>•</span>
             <span>Enterprise Triage Dashboard</span>
           </div>
-          <p>© 2026 SupportFlow AI. Built with Gemini Pro.</p>
+          <p>© 2026 SupportFlow AI. Enterprise Support Automation.</p>
         </div>
       </footer>
     </div>

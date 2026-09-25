@@ -16,13 +16,13 @@ export const HomeView: React.FC<HomeViewProps> = ({ onSelectTab, onTrySample }) 
             <div className="z-10">
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full mb-6">
                 <span className="material-symbols-outlined text-[18px]">auto_awesome</span>
-                <span className="text-body-small font-body-small">Powered by Gemini Pro AI</span>
+                <span className="text-body-small font-body-small">SupportFlow AI Engine</span>
               </div>
               <h1 className="font-hero-display text-hero-display-mobile lg:text-hero-display text-on-surface mb-6 leading-tight">
                 AI-Powered Support Ticket <span className="text-primary">Triage &amp; Smart Routing</span>
               </h1>
               <p className="text-on-surface-variant text-lg mb-10 max-w-xl">
-                Instantly classify, prioritize, and route complex enterprise support tickets using Gemini AI. Transform chaotic inboxes into structured workflows with high-confidence automated decision making.
+                Instantly classify, prioritize, and route complex enterprise support tickets using intelligent automation. Transform chaotic inboxes into structured workflows with high-confidence automated decision making.
               </p>
               <div className="flex flex-wrap gap-4">
                 <button 
@@ -160,7 +160,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onSelectTab, onTrySample }) 
                 <div className="flex-shrink-0 w-12 h-12 bg-surface-container-high rounded-full flex items-center justify-center font-bold text-primary group-hover:bg-primary group-hover:text-on-primary transition-all">2</div>
                 <div>
                   <h4 className="text-xl font-bold mb-2">Deep Semantic Analysis</h4>
-                  <p className="text-on-surface-variant">Gemini AI parses the language, tone, and technical details to understand the core problem beyond simple keywords.</p>
+                  <p className="text-on-surface-variant">Advanced AI parses the language, tone, and technical details to understand the core problem beyond simple keywords.</p>
                 </div>
               </div>
               <div className="flex gap-6 group">
@@ -243,7 +243,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onSelectTab, onTrySample }) 
             <div className="col-span-1 md:col-span-1">
               <span className="font-card-title text-card-title text-primary mb-6 block">SupportFlow AI</span>
               <p className="text-surface-variant text-sm leading-relaxed">
-                The next generation of enterprise support triage. Leveraging Gemini Pro to bring intelligent automation to your customer service workflow.
+                The next generation of enterprise support triage. Leveraging intelligent AI to bring automation to your customer service workflow.
               </p>
             </div>
             <div>

@@ -98,7 +98,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onSelectTab }) => 
               </div>
               <div>
                 <h4 className="font-bold text-on-surface text-sm">Support Operations</h4>
-                <span className="text-xs text-outline">Gemini 3.6 Flash Engine</span>
+                <span className="text-xs text-outline">AI Decision Engine</span>
               </div>
             </div>
 
@@ -263,7 +263,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onSelectTab }) => 
                   <span className="material-symbols-outlined text-[18px]">auto_awesome</span>
                 </div>
                 <span className="text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full inline-block mt-2">
-                  Gemini 3.6 Flash
+                  SupportFlow AI
                 </span>
               </div>
             </div>

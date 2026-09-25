@@ -280,7 +280,7 @@ export const BatchProcessingView: React.FC = () => {
               Batch Ticket Processing Engine
             </h1>
             <p className="text-on-surface-variant text-sm">
-              Process datasets of support tickets simultaneously with Gemini AI automated triage.
+              Process datasets of support tickets simultaneously with automated AI triage.
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -321,7 +321,7 @@ export const BatchProcessingView: React.FC = () => {
                 Active Batch
               </span>
             </div>
-            <span className="text-[11px] text-outline mt-1.5 block">Analyzed by Gemini</span>
+            <span className="text-[11px] text-outline mt-1.5 block">Analyzed by AI</span>
           </div>
 
           <div className="bg-surface-container-lowest p-5 rounded-2xl border border-outline-variant shadow-sm">

@@ -88,7 +88,7 @@ export const AnalyzeTicketView: React.FC = () => {
         confidence: typeof data.confidence === 'number' ? data.confidence : 85,
         assignedTeam: data.assignedTeam || 'General Support',
         humanReview: Boolean(data.humanReview),
-        reason: data.reason || 'Processed by Gemini AI.',
+        reason: data.reason || 'Processed by SupportFlow AI.',
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
 
@@ -145,12 +145,12 @@ export const AnalyzeTicketView: React.FC = () => {
               Single Ticket Triage &amp; Analysis
             </h1>
             <p className="text-on-surface-variant text-sm">
-              Real-time classification, urgency detection, confidence scoring, and team routing powered by Gemini AI.
+              Real-time classification, urgency detection, confidence scoring, and team routing powered by SupportFlow AI.
             </p>
           </div>
           <div className="flex items-center gap-2 bg-surface-container-low px-3 py-1.5 rounded-full border border-outline-variant text-xs text-outline font-medium">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            Gemini 3.6 Flash Active
+            AI Engine Active
           </div>
         </div>
 
@@ -412,7 +412,7 @@ export const AnalyzeTicketView: React.FC = () => {
             )}
 
             <div className="pt-4 border-t border-outline-variant flex justify-between items-center text-xs text-outline mt-auto">
-              <span>Model: Gemini 3.6 Flash</span>
+              <span>Engine: SupportFlow Triage v2</span>
               <span>Ticket ID: {analysisResult ? analysisResult.id : 'N/A'}</span>
             </div>
           </div>
@@ -433,7 +433,7 @@ export const AnalyzeTicketView: React.FC = () => {
               analysisResult ? 'bg-primary/10 border-primary/40' : 'bg-surface-container-low border-outline-variant'
             }`}>
               <span className="text-[10px] font-bold text-outline uppercase block mb-1">STAGE 02</span>
-              <span className="font-bold text-on-surface text-sm block mb-1">Gemini AI Analysis</span>
+              <span className="font-bold text-on-surface text-sm block mb-1">AI Reasoning Analysis</span>
               <p className="text-xs text-on-surface-variant">Intent extraction, sentiment &amp; priority evaluated.</p>
             </div>
             <div className={`p-4 rounded-2xl border transition-colors ${

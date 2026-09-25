@@ -187,7 +187,7 @@ app.post("/api/analyze-ticket", async (req, res) => {
       confidence,
       assignedTeam: data.assignedTeam || "General Support",
       humanReview,
-      reason: data.reason || "Analyzed by Gemini AI."
+      reason: data.reason || "Analyzed by SupportFlow AI."
     });
   } catch (err) {
     console.error("Gemini API error, using fallback:", err);
@@ -259,7 +259,7 @@ app.post("/api/analyze-batch", async (req, res) => {
           confidence,
           assignedTeam: data.assignedTeam || "General Support",
           humanReview,
-          reason: data.reason || "Batch analyzed via Gemini AI."
+          reason: data.reason || "Batch analyzed via SupportFlow AI."
         };
       } catch (e) {
         const fallback = ruleBasedTriage(subject, body);
