@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { NavTab } from './types';
+import { TicketProvider } from './context/TicketContext';
 import { Navbar } from './components/Navbar';
 import { MobileBottomNav } from './components/MobileBottomNav';
 import { HomeView } from './components/HomeView';
@@ -17,39 +18,41 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-surface text-on-surface flex flex-col font-sans antialiased selection:bg-primary/20 selection:text-primary">
-      {/* Top Header Navigation */}
-      <Navbar currentTab={currentTab} onSelectTab={setCurrentTab} />
+    <TicketProvider>
+      <div className="min-h-screen bg-surface text-on-surface flex flex-col font-sans antialiased selection:bg-primary/20 selection:text-primary">
+        {/* Top Header Navigation */}
+        <Navbar currentTab={currentTab} onSelectTab={setCurrentTab} />
 
-      {/* Main View Area with Mobile Bottom Nav Padding */}
-      <main className="flex-1 w-full pb-18 lg:pb-0 overflow-x-hidden">
-        {currentTab === 'home' && (
-          <HomeView onSelectTab={setCurrentTab} onTrySample={handleTrySample} />
-        )}
+        {/* Main View Area with Mobile Bottom Nav Padding */}
+        <main className="flex-1 w-full pb-18 lg:pb-0 overflow-x-hidden">
+          {currentTab === 'home' && (
+            <HomeView onSelectTab={setCurrentTab} onTrySample={handleTrySample} />
+          )}
 
-        {currentTab === 'analyze' && (
-          <AnalyzeTicketView />
-        )}
+          {currentTab === 'analyze' && (
+            <AnalyzeTicketView />
+          )}
 
-        {currentTab === 'batch' && (
-          <BatchProcessingView />
-        )}
+          {currentTab === 'batch' && (
+            <BatchProcessingView />
+          )}
 
-        {currentTab === 'dashboard' && (
-          <DashboardView onSelectTab={setCurrentTab} />
-        )}
+          {currentTab === 'dashboard' && (
+            <DashboardView onSelectTab={setCurrentTab} />
+          )}
 
-        {currentTab === 'qa' && (
-          <QAValidationView />
-        )}
+          {currentTab === 'qa' && (
+            <QAValidationView />
+          )}
 
-        {currentTab === 'about' && (
-          <AboutView onSelectTab={setCurrentTab} />
-        )}
-      </main>
+          {currentTab === 'about' && (
+            <AboutView onSelectTab={setCurrentTab} />
+          )}
+        </main>
 
-      {/* Floating Mobile Bottom Navigation Bar */}
-      <MobileBottomNav currentTab={currentTab} onSelectTab={setCurrentTab} />
-    </div>
+        {/* Floating Mobile Bottom Navigation Bar */}
+        <MobileBottomNav currentTab={currentTab} onSelectTab={setCurrentTab} />
+      </div>
+    </TicketProvider>
   );
 }

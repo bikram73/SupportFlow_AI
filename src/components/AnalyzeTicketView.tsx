@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { AnalyzedTicket, SampleTicketItem } from '../types';
 import { DEFAULT_SAMPLE_TICKETS, ruleBasedTriage, evaluateDecisionBoundary } from '../utils/triageFallback';
+import { useTickets } from '../context/TicketContext';
 
 export const AnalyzeTicketView: React.FC = () => {
+  const { addTicket } = useTickets();
   const [subject, setSubject] = useState('');
   const [body, setBody] = useState('');
   const [selectedSampleId, setSelectedSampleId] = useState<string | null>(null);
@@ -121,6 +123,7 @@ export const AnalyzeTicketView: React.FC = () => {
 
       setAnalysisResult(ticket);
       setNeedsHumanReview(ticket.humanReview);
+      addTicket(ticket);
     } catch (err: any) {
       console.warn('API call encountered an issue, executing client fallback triage:', err);
       const fallback = ruleBasedTriage(cleanSub, cleanBody);
@@ -139,6 +142,7 @@ export const AnalyzeTicketView: React.FC = () => {
       };
       setAnalysisResult(ticket);
       setNeedsHumanReview(ticket.humanReview);
+      addTicket(ticket);
     } finally {
       setIsAnalyzing(false);
     }

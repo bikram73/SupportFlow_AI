@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { BatchTicket } from '../types';
+import { BatchTicket, AnalyzedTicket } from '../types';
 import { DEFAULT_SAMPLE_TICKETS, ruleBasedTriage } from '../utils/triageFallback';
+import { useTickets } from '../context/TicketContext';
 
 export const BatchProcessingView: React.FC = () => {
+  const { addBatchTickets } = useTickets();
   const [tickets, setTickets] = useState<BatchTicket[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All');
@@ -129,6 +131,19 @@ export const BatchProcessingView: React.FC = () => {
         });
         setTickets(formatted);
         setCurrentPage(1);
+        addBatchTickets(formatted.map(t => ({
+          id: t.id,
+          subject: t.subject,
+          body: t.body || '',
+          category: t.category,
+          urgency: t.urgency,
+          confidence: t.confidence,
+          assignedTeam: t.assignedTeam,
+          humanReview: t.humanReview,
+          routingStatus: t.routingStatus,
+          reason: t.reason,
+          timestamp: 'Just now'
+        })));
         return;
       }
     } catch (err) {
@@ -154,6 +169,19 @@ export const BatchProcessingView: React.FC = () => {
       });
       setTickets(fallbackFormatted);
       setCurrentPage(1);
+      addBatchTickets(fallbackFormatted.map(t => ({
+        id: t.id,
+        subject: t.subject,
+        body: t.body || '',
+        category: t.category,
+        urgency: t.urgency,
+        confidence: t.confidence,
+        assignedTeam: t.assignedTeam,
+        humanReview: t.humanReview,
+        routingStatus: t.routingStatus,
+        reason: t.reason,
+        timestamp: 'Just now'
+      })));
     }
   };
 
