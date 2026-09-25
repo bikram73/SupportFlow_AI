@@ -1,27 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
-import { AnalyzedTicket, UrgencyLevel, RoutingStatus } from '../types';
+import { AnalyzedTicket } from '../types';
 import { DEFAULT_SAMPLE_TICKETS, ruleBasedTriage } from '../utils/triageFallback';
 
-const STORAGE_KEY = 'supportflow_analyzed_tickets_v1';
-
-// Initial seed tickets generated realistically
-const INITIAL_SEEDED_TICKETS: AnalyzedTicket[] = DEFAULT_SAMPLE_TICKETS.map((sample, idx) => {
-  const triage = ruleBasedTriage(sample.subject, sample.body);
-  const minutesAgo = (idx + 1) * 4;
-  return {
-    id: sample.id,
-    subject: sample.subject,
-    body: sample.body,
-    category: triage.category,
-    urgency: triage.urgency,
-    confidence: triage.confidence,
-    assignedTeam: triage.assignedTeam,
-    humanReview: triage.humanReview,
-    routingStatus: triage.routingStatus,
-    reason: triage.reason,
-    timestamp: `${minutesAgo} mins ago`
-  };
-});
+const STORAGE_KEY = 'supportflow_analyzed_tickets_v2';
 
 interface CategoryStat {
   name: string;
@@ -80,6 +61,7 @@ const CATEGORY_COLORS: Record<string, string> = {
 };
 
 export const TicketProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  // Start EMPTY unless user has previously uploaded or saved tickets in localStorage
   const [tickets, setTickets] = useState<AnalyzedTicket[]>(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
@@ -92,13 +74,17 @@ export const TicketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     } catch (e) {
       console.warn('Failed to parse stored tickets from localStorage', e);
     }
-    return INITIAL_SEEDED_TICKETS;
+    return []; // Clean initially
   });
 
   // Sync to localStorage whenever tickets change
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(tickets));
+      if (tickets.length > 0) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(tickets));
+      } else {
+        localStorage.removeItem(STORAGE_KEY);
+      }
     } catch (e) {
       console.warn('Failed to save tickets to localStorage', e);
     }
@@ -106,7 +92,6 @@ export const TicketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const addTicket = (ticket: AnalyzedTicket) => {
     setTickets((prev) => {
-      // Avoid duplicate by ID, put latest first
       const filtered = prev.filter((t) => t.id !== ticket.id);
       const withTimestamp: AnalyzedTicket = {
         ...ticket,
@@ -130,10 +115,32 @@ export const TicketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const clearTickets = () => {
     setTickets([]);
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (e) {
+      console.warn('Failed to remove from localStorage', e);
+    }
   };
 
   const resetToSampleData = () => {
-    setTickets(INITIAL_SEEDED_TICKETS);
+    const sampleBatch = DEFAULT_SAMPLE_TICKETS.map((sample, idx) => {
+      const triage = ruleBasedTriage(sample.subject, sample.body);
+      const minutesAgo = (idx + 1) * 3;
+      return {
+        id: sample.id,
+        subject: sample.subject,
+        body: sample.body,
+        category: triage.category,
+        urgency: triage.urgency,
+        confidence: triage.confidence,
+        assignedTeam: triage.assignedTeam,
+        humanReview: triage.humanReview,
+        routingStatus: triage.routingStatus,
+        reason: triage.reason,
+        timestamp: `${minutesAgo} mins ago`
+      };
+    });
+    setTickets(sampleBatch);
   };
 
   // Compute live real-time statistics based strictly on actual tickets
