@@ -1,0 +1,6 @@
+{
+  "name": "SupportFlow AI",
+  "description": "Enterprise Support Ticket Triage & Smart Routing Dashboard powered by Gemini AI",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
