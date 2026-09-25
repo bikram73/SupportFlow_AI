@@ -239,7 +239,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onSelectTab, onTrySample }) 
       {/* Footer */}
       <footer className="bg-on-surface text-surface py-20 px-margin-desktop">
         <div className="max-w-container-max-width mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
             <div className="col-span-1 md:col-span-1">
               <span className="font-card-title text-card-title text-primary mb-6 block">SupportFlow AI</span>
               <p className="text-surface-variant text-sm leading-relaxed">
@@ -263,16 +263,6 @@ export const HomeView: React.FC<HomeViewProps> = ({ onSelectTab, onTrySample }) 
                 <li><a onClick={() => onSelectTab('about')} className="hover:text-white transition-colors cursor-pointer" href="#terms">Terms of Service</a></li>
                 <li><a onClick={() => onSelectTab('about')} className="hover:text-white transition-colors cursor-pointer" href="#contact">Contact Support</a></li>
               </ul>
-            </div>
-            <div>
-              <h5 className="font-bold mb-6 text-white">Tech Stack</h5>
-              <div className="flex flex-wrap gap-2">
-                <span className="px-3 py-1 bg-surface/10 rounded-full text-xs border border-white/10">Google Gemini</span>
-                <span className="px-3 py-1 bg-surface/10 rounded-full text-xs border border-white/10">React 19</span>
-                <span className="px-3 py-1 bg-surface/10 rounded-full text-xs border border-white/10">Tailwind CSS</span>
-                <span className="px-3 py-1 bg-surface/10 rounded-full text-xs border border-white/10">TypeScript</span>
-                <span className="px-3 py-1 bg-surface/10 rounded-full text-xs border border-white/10">Vector DB</span>
-              </div>
             </div>
           </div>
           <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-surface-variant text-sm">
