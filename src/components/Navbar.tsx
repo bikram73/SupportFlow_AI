@@ -12,6 +12,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentTab, onSelectTab }) => {
     { tab: 'analyze', label: 'Analyze Ticket' },
     { tab: 'batch', label: 'Batch Processing' },
     { tab: 'dashboard', label: 'Dashboard' },
+    { tab: 'qa', label: 'QA Suite' },
     { tab: 'about', label: 'About' },
   ];
 

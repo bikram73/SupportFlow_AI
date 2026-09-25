@@ -106,11 +106,11 @@ export const BatchProcessingView: React.FC = () => {
       const data = await res.json();
       if (data && Array.isArray(data.tickets)) {
         const formatted: BatchTicket[] = data.tickets.map((t: any) => {
-          let status: 'Auto Routed' | 'Recommended' | 'Needs Review' = 'Auto Routed';
+          let routingStatus: 'Auto-Routed' | 'Recommended' | 'Needs Review' = 'Auto-Routed';
           if (t.humanReview || t.confidence < 70) {
-            status = 'Needs Review';
+            routingStatus = 'Needs Review';
           } else if (t.confidence < 90) {
-            status = 'Recommended';
+            routingStatus = 'Recommended';
           }
 
           return {
@@ -122,8 +122,9 @@ export const BatchProcessingView: React.FC = () => {
             confidence: t.confidence,
             assignedTeam: t.assignedTeam,
             humanReview: t.humanReview,
+            routingStatus: t.routingStatus || routingStatus,
             reason: t.reason,
-            status
+            status: routingStatus
           };
         });
         setTickets(formatted);
@@ -137,13 +138,6 @@ export const BatchProcessingView: React.FC = () => {
         const bodyText = t.body || '';
         const triage = ruleBasedTriage(sub, bodyText);
 
-        let status: 'Auto Routed' | 'Recommended' | 'Needs Review' = 'Auto Routed';
-        if (triage.humanReview || triage.confidence < 70) {
-          status = 'Needs Review';
-        } else if (triage.confidence < 90) {
-          status = 'Recommended';
-        }
-
         return {
           id: t.id || `ANL-${Math.floor(1000 + Math.random() * 9000)}`,
           subject: sub,
@@ -153,8 +147,9 @@ export const BatchProcessingView: React.FC = () => {
           confidence: triage.confidence,
           assignedTeam: triage.assignedTeam,
           humanReview: triage.humanReview,
+          routingStatus: triage.routingStatus,
           reason: triage.reason,
-          status
+          status: triage.routingStatus
         };
       });
       setTickets(fallbackFormatted);

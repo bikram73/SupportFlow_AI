@@ -6,6 +6,7 @@ import { AnalyzeTicketView } from './components/AnalyzeTicketView';
 import { BatchProcessingView } from './components/BatchProcessingView';
 import { DashboardView } from './components/DashboardView';
 import { AboutView } from './components/AboutView';
+import { QAValidationView } from './components/QAValidationView';
 
 export default function App() {
   const [currentTab, setCurrentTab] = useState<NavTab>('home');
@@ -35,6 +36,10 @@ export default function App() {
 
         {currentTab === 'dashboard' && (
           <DashboardView onSelectTab={setCurrentTab} />
+        )}
+
+        {currentTab === 'qa' && (
+          <QAValidationView />
         )}
 
         {currentTab === 'about' && (

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AnalyzedTicket, SampleTicketItem } from '../types';
-import { DEFAULT_SAMPLE_TICKETS, ruleBasedTriage } from '../utils/triageFallback';
+import { DEFAULT_SAMPLE_TICKETS, ruleBasedTriage, evaluateDecisionBoundary } from '../utils/triageFallback';
 
 export const AnalyzeTicketView: React.FC = () => {
   const [subject, setSubject] = useState('');
@@ -11,6 +11,7 @@ export const AnalyzeTicketView: React.FC = () => {
   const [needsHumanReview, setNeedsHumanReview] = useState(false);
   const [sampleTickets, setSampleTickets] = useState<SampleTicketItem[]>(DEFAULT_SAMPLE_TICKETS);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<{ subject?: string; body?: string }>({});
 
   useEffect(() => {
     // Fetch predefined sample tickets
@@ -33,6 +34,7 @@ export const AnalyzeTicketView: React.FC = () => {
     setSelectedSampleId(sample.id);
     setAnalysisResult(null);
     setErrorMessage(null);
+    setFieldErrors({});
   };
 
   const clearForm = () => {
@@ -42,6 +44,7 @@ export const AnalyzeTicketView: React.FC = () => {
     setAnalysisResult(null);
     setNeedsHumanReview(false);
     setErrorMessage(null);
+    setFieldErrors({});
   };
 
   const handleAnalyze = async (e?: React.FormEvent) => {
@@ -49,28 +52,35 @@ export const AnalyzeTicketView: React.FC = () => {
     const cleanSub = subject.trim();
     const cleanBody = body.trim();
 
+    // Input Validation (TC-B002, TC-B003, TC-B004, TC-B005)
+    const errors: { subject?: string; body?: string } = {};
     if (!cleanSub && !cleanBody) {
-      if (sampleTickets.length > 0) {
-        handleSelectSample(sampleTickets[0]);
-        return;
-      } else {
-        setSubject("Cannot login");
-        setBody("I have tried resetting my password but I still cannot access my account.");
-        setSelectedSampleId("ANL-1713");
-      }
+      setErrorMessage("Please enter a ticket subject and description.");
+      setFieldErrors({ subject: "Subject is required", body: "Description is required" });
+      return;
+    }
+    if (!cleanSub) {
+      errors.subject = "Ticket subject is required.";
+    }
+    if (!cleanBody) {
+      errors.body = "Ticket body / description is required.";
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      setErrorMessage(errors.subject || errors.body || "Please fill in all required fields.");
+      return;
     }
 
     setIsAnalyzing(true);
     setErrorMessage(null);
+    setFieldErrors({});
 
-    const activeSub = cleanSub || (sampleTickets[0]?.subject ?? 'Cannot login');
-    const activeBody = cleanBody || (sampleTickets[0]?.body ?? 'I have tried resetting my password but I still cannot access my account.');
-    
     // Resolve appropriate analysis ID
     let currentId = selectedSampleId;
     if (!currentId) {
       const matched = sampleTickets.find(
-        (s) => s.subject.toLowerCase() === activeSub.toLowerCase() || s.body.toLowerCase() === activeBody.toLowerCase()
+        (s) => s.subject.toLowerCase() === cleanSub.toLowerCase() || s.body.toLowerCase() === cleanBody.toLowerCase()
       );
       currentId = matched ? matched.id : `ANL-${Math.floor(1000 + Math.random() * 9000)}`;
     }
@@ -81,25 +91,30 @@ export const AnalyzeTicketView: React.FC = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           id: currentId,
-          subject: activeSub,
-          body: activeBody
+          subject: cleanSub,
+          body: cleanBody
         })
       });
 
       if (!res.ok) {
-        throw new Error(`Server returned HTTP ${res.status}`);
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || `Server returned HTTP ${res.status}`);
       }
 
       const data = await res.json();
+      const confidence = typeof data.confidence === 'number' ? data.confidence : 95;
+      const boundary = evaluateDecisionBoundary(confidence, Boolean(data.humanReview));
+
       const ticket: AnalyzedTicket = {
         id: data.id || currentId,
-        subject: data.subject || activeSub,
-        body: data.body || activeBody,
+        subject: data.subject || cleanSub,
+        body: data.body || cleanBody,
         category: data.category || 'General Question',
         urgency: data.urgency || 'Low',
-        confidence: typeof data.confidence === 'number' ? data.confidence : 95,
+        confidence,
         assignedTeam: data.assignedTeam || 'General Support',
-        humanReview: Boolean(data.humanReview),
+        humanReview: boundary.humanReview,
+        routingStatus: data.routingStatus || boundary.routingStatus,
         reason: data.reason || 'Processed by SupportFlow AI.',
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
@@ -107,17 +122,18 @@ export const AnalyzeTicketView: React.FC = () => {
       setAnalysisResult(ticket);
       setNeedsHumanReview(ticket.humanReview);
     } catch (err: any) {
-      console.warn('API route unreachable, executing client-side fallback triage:', err);
-      const fallback = ruleBasedTriage(activeSub, activeBody);
+      console.warn('API call encountered an issue, executing client fallback triage:', err);
+      const fallback = ruleBasedTriage(cleanSub, cleanBody);
       const ticket: AnalyzedTicket = {
         id: currentId,
-        subject: activeSub,
-        body: activeBody,
+        subject: cleanSub,
+        body: cleanBody,
         category: fallback.category,
         urgency: fallback.urgency,
         confidence: fallback.confidence,
         assignedTeam: fallback.assignedTeam,
         humanReview: fallback.humanReview,
+        routingStatus: fallback.routingStatus,
         reason: fallback.reason,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
@@ -143,7 +159,7 @@ export const AnalyzeTicketView: React.FC = () => {
 
   const getConfidenceColor = (conf: number) => {
     if (conf >= 90) return 'stroke-primary text-primary';
-    if (conf >= 70) return 'stroke-amber-600 text-amber-600';
+    if (conf >= 70) return 'stroke-blue-600 text-blue-600';
     return 'stroke-error text-error';
   };
 
@@ -199,17 +215,17 @@ export const AnalyzeTicketView: React.FC = () => {
                 <h3 className="font-card-title text-card-title text-on-surface flex items-center gap-2">
                   <span className="material-symbols-outlined text-primary">edit_note</span> Ticket Input
                 </h3>
-                <span className="text-xs text-outline font-medium">Form / API Request</span>
+                <span className="text-xs text-outline font-medium">Form / REST API</span>
               </div>
 
               {errorMessage && (
-                <div className="mb-4 p-3 bg-error-container text-on-error-container rounded-xl text-xs flex items-center gap-2">
+                <div className="mb-4 p-3.5 bg-error-container text-on-error-container rounded-xl text-xs flex items-center gap-2 font-medium">
                   <span className="material-symbols-outlined text-[18px]">error</span>
                   {errorMessage}
                 </div>
               )}
 
-              <form onSubmit={handleAnalyze} className="space-y-5">
+              <form onSubmit={handleAnalyze} className="space-y-5" noValidate>
                 <div>
                   <label htmlFor="ticket-subject" className="block text-xs font-bold text-on-surface mb-2">
                     Ticket Subject <span className="text-error">*</span>
@@ -221,10 +237,17 @@ export const AnalyzeTicketView: React.FC = () => {
                     onChange={(e) => {
                       setSubject(e.target.value);
                       setSelectedSampleId(null);
+                      if (fieldErrors.subject) setFieldErrors({ ...fieldErrors, subject: undefined });
+                      if (errorMessage) setErrorMessage(null);
                     }}
                     placeholder="e.g. Cannot login after resetting password"
-                    className="w-full px-4 py-3 rounded-xl bg-surface-container-low border border-outline-variant focus:border-primary focus:outline-none transition-all text-sm text-on-surface placeholder:text-outline"
+                    className={`w-full px-4 py-3 rounded-xl bg-surface-container-low border transition-all text-sm text-on-surface placeholder:text-outline focus:outline-none ${
+                      fieldErrors.subject ? 'border-error focus:border-error' : 'border-outline-variant focus:border-primary'
+                    }`}
                   />
+                  {fieldErrors.subject && (
+                    <span className="text-[11px] text-error font-medium mt-1 block">{fieldErrors.subject}</span>
+                  )}
                 </div>
 
                 <div>
@@ -238,10 +261,17 @@ export const AnalyzeTicketView: React.FC = () => {
                     onChange={(e) => {
                       setBody(e.target.value);
                       setSelectedSampleId(null);
+                      if (fieldErrors.body) setFieldErrors({ ...fieldErrors, body: undefined });
+                      if (errorMessage) setErrorMessage(null);
                     }}
                     placeholder="Enter customer message, error trace, or email body..."
-                    className="w-full px-4 py-3 rounded-xl bg-surface-container-low border border-outline-variant focus:border-primary focus:outline-none transition-all text-sm text-on-surface placeholder:text-outline resize-none"
+                    className={`w-full px-4 py-3 rounded-xl bg-surface-container-low border transition-all text-sm text-on-surface placeholder:text-outline resize-none focus:outline-none ${
+                      fieldErrors.body ? 'border-error focus:border-error' : 'border-outline-variant focus:border-primary'
+                    }`}
                   ></textarea>
+                  {fieldErrors.body && (
+                    <span className="text-[11px] text-error font-medium mt-1 block">{fieldErrors.body}</span>
+                  )}
                 </div>
 
                 <div className="flex items-center gap-3 pt-1">
@@ -252,7 +282,7 @@ export const AnalyzeTicketView: React.FC = () => {
                   >
                     Clear Form
                   </button>
-                  <span className="text-xs text-outline ml-auto">
+                  <span className="text-xs text-outline ml-auto font-mono">
                     {body.length} chars
                   </span>
                 </div>
