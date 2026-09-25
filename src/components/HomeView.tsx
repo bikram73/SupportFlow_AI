@@ -241,7 +241,15 @@ export const HomeView: React.FC<HomeViewProps> = ({ onSelectTab, onTrySample }) 
         <div className="max-w-container-max-width mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
             <div className="col-span-1 md:col-span-1">
-              <span className="font-card-title text-card-title text-primary mb-6 block">SupportFlow AI</span>
+              <span className="inline-flex items-center gap-2.5 font-card-title text-card-title text-primary mb-6">
+                <span className="w-8 h-8 rounded-xl bg-gradient-to-tr from-primary via-blue-600 to-sky-400 flex items-center justify-center text-white shadow-sm ring-1 ring-white/10">
+                  <svg className="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
+                    <path d="m9 12 2 2 4-4" />
+                  </svg>
+                </span>
+                <span className="font-bold tracking-tight text-white">SupportFlow AI</span>
+              </span>
               <p className="text-surface-variant text-sm leading-relaxed">
                 The next generation of enterprise support triage. Leveraging intelligent AI to bring automation to your customer service workflow.
               </p>
