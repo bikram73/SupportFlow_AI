@@ -93,149 +93,59 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onSelectTab }) => 
 
   return (
     <div id="dashboard-view" className="w-full">
-      <div className="max-w-container-max-width mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8">
-          {/* Sidebar Navigation (Hidden on small mobile if preferred, accessible via top/bottom nav) */}
-          <aside className="lg:col-span-3 bg-surface-container-lowest p-4 sm:p-6 rounded-3xl border border-outline-variant shadow-xs h-fit space-y-4 sm:space-y-6">
-            {/* User Profile Info */}
-            <div className="flex items-center gap-3 p-3 bg-surface-container-low rounded-2xl">
-              <div className="w-9 h-9 sm:w-10 sm:h-10 bg-primary/10 text-primary rounded-xl flex items-center justify-center font-bold text-sm">
-                SF
-              </div>
-              <div>
-                <h4 className="font-bold text-on-surface text-xs sm:text-sm">Support Operations</h4>
-                <span className="text-[11px] text-outline">AI Decision Engine</span>
-              </div>
+      <div className="max-w-container-max-width mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-8 space-y-6 sm:space-y-8">
+        {/* Top Bar Controls */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 bg-surface-container-lowest p-4 sm:p-6 rounded-3xl border border-outline-variant shadow-xs">
+          <div>
+            <h1 className="text-xl sm:text-2xl font-extrabold text-on-surface tracking-tight">Support Ticket Analytics</h1>
+            <p className="text-xs text-on-surface-variant">Real-time triage metrics, confidence ratings, and queue allocations.</p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+            <div className="relative flex-1 sm:flex-none">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search events..."
+                className="pl-8 pr-3 py-1.5 sm:py-2 bg-surface-container-low border border-outline-variant rounded-xl text-xs text-on-surface focus:outline-none focus:border-primary w-full sm:w-44"
+              />
+              <span className="material-symbols-outlined absolute left-2.5 top-2 text-outline text-[16px]">
+                search
+              </span>
             </div>
 
-            {/* Quick Nav Links */}
-            <nav className="space-y-1">
+            <div className="flex bg-surface-container-low p-1 rounded-xl border border-outline-variant">
               <button
                 type="button"
-                onClick={() => onSelectTab('home')}
-                className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors cursor-pointer"
+                onClick={() => setTimeRange('today')}
+                className={`px-2.5 sm:px-3 py-1 rounded-lg text-xs font-bold cursor-pointer transition-colors ${
+                  timeRange === 'today' ? 'bg-primary text-on-primary' : 'text-on-surface-variant hover:text-on-surface'
+                }`}
               >
-                <span className="material-symbols-outlined text-[20px]">home</span>
-                Home Overview
+                Today
               </button>
-
               <button
                 type="button"
-                onClick={() => onSelectTab('analyze')}
-                className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors cursor-pointer"
+                onClick={() => setTimeRange('week')}
+                className={`px-2.5 sm:px-3 py-1 rounded-lg text-xs font-bold cursor-pointer transition-colors ${
+                  timeRange === 'week' ? 'bg-primary text-on-primary' : 'text-on-surface-variant hover:text-on-surface'
+                }`}
               >
-                <span className="material-symbols-outlined text-[20px]">analytics</span>
-                Single Ticket Analysis
+                Week
               </button>
-
               <button
                 type="button"
-                onClick={() => onSelectTab('batch')}
-                className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors cursor-pointer"
+                onClick={() => setTimeRange('month')}
+                className={`px-2.5 sm:px-3 py-1 rounded-lg text-xs font-bold cursor-pointer transition-colors ${
+                  timeRange === 'month' ? 'bg-primary text-on-primary' : 'text-on-surface-variant hover:text-on-surface'
+                }`}
               >
-                <span className="material-symbols-outlined text-[20px]">dataset</span>
-                Batch Processing
-              </button>
-
-              <button
-                type="button"
-                onClick={() => onSelectTab('dashboard')}
-                className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-primary text-on-primary cursor-pointer shadow-xs"
-              >
-                <span className="material-symbols-outlined text-[20px]">dashboard</span>
-                Triage Dashboard
-              </button>
-
-              <button
-                type="button"
-                onClick={() => onSelectTab('qa')}
-                className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors cursor-pointer"
-              >
-                <span className="material-symbols-outlined text-[20px]">verified</span>
-                QA &amp; Verification Suite
-              </button>
-
-              <button
-                type="button"
-                onClick={() => onSelectTab('about')}
-                className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors cursor-pointer"
-              >
-                <span className="material-symbols-outlined text-[20px]">info</span>
-                Decision Boundary Specs
-              </button>
-            </nav>
-
-            {/* AI Insights Banner */}
-            <div className="p-3.5 sm:p-4 bg-gradient-to-br from-primary/10 to-tertiary/10 rounded-2xl border border-primary/20">
-              <span className="material-symbols-outlined text-primary mb-1.5 text-[20px]">auto_awesome</span>
-              <h5 className="font-bold text-on-surface text-xs sm:text-sm mb-1">Confidence Thresholds</h5>
-              <p className="text-[11px] text-on-surface-variant mb-2.5 leading-relaxed">
-                &ge;90% Auto-routed, 70-89% Recommended, &lt;70% Human Review Flag.
-              </p>
-              <button
-                type="button"
-                onClick={() => onSelectTab('qa')}
-                className="text-[11px] font-bold text-primary hover:underline flex items-center gap-1 cursor-pointer"
-              >
-                Run Boundary Audit <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+                Month
               </button>
             </div>
-          </aside>
-
-          {/* Main Dashboard Workspace */}
-          <main className="lg:col-span-9 space-y-6 sm:space-y-8">
-            {/* Top Bar Controls */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 bg-surface-container-lowest p-4 sm:p-6 rounded-3xl border border-outline-variant shadow-xs">
-              <div>
-                <h1 className="text-xl sm:text-2xl font-extrabold text-on-surface tracking-tight">Support Ticket Analytics</h1>
-                <p className="text-xs text-on-surface-variant">Real-time triage metrics, confidence ratings, and queue allocations.</p>
-              </div>
-
-              <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-                <div className="relative flex-1 sm:flex-none">
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search events..."
-                    className="pl-8 pr-3 py-1.5 sm:py-2 bg-surface-container-low border border-outline-variant rounded-xl text-xs text-on-surface focus:outline-none focus:border-primary w-full sm:w-44"
-                  />
-                  <span className="material-symbols-outlined absolute left-2.5 top-2 text-outline text-[16px]">
-                    search
-                  </span>
-                </div>
-
-                <div className="flex bg-surface-container-low p-1 rounded-xl border border-outline-variant">
-                  <button
-                    type="button"
-                    onClick={() => setTimeRange('today')}
-                    className={`px-2.5 sm:px-3 py-1 rounded-lg text-xs font-bold cursor-pointer transition-colors ${
-                      timeRange === 'today' ? 'bg-primary text-on-primary' : 'text-on-surface-variant hover:text-on-surface'
-                    }`}
-                  >
-                    Today
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setTimeRange('week')}
-                    className={`px-2.5 sm:px-3 py-1 rounded-lg text-xs font-bold cursor-pointer transition-colors ${
-                      timeRange === 'week' ? 'bg-primary text-on-primary' : 'text-on-surface-variant hover:text-on-surface'
-                    }`}
-                  >
-                    Week
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setTimeRange('month')}
-                    className={`px-2.5 sm:px-3 py-1 rounded-lg text-xs font-bold cursor-pointer transition-colors ${
-                      timeRange === 'month' ? 'bg-primary text-on-primary' : 'text-on-surface-variant hover:text-on-surface'
-                    }`}
-                  >
-                    Month
-                  </button>
-                </div>
-              </div>
-            </div>
+          </div>
+        </div>
 
             {/* Metric KPI Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
@@ -473,8 +383,6 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onSelectTab }) => 
                 </table>
               </div>
             </div>
-          </main>
-        </div>
       </div>
 
       {/* Floating Action Button (above mobile bottom bar) */}
