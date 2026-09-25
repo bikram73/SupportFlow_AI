@@ -151,7 +151,7 @@ export const AboutView: React.FC<AboutViewProps> = ({ onSelectTab }) => {
                 <div>
                   <h4 className="font-bold text-on-surface mb-1">Closing the Loop</h4>
                   <p className="text-xs text-on-surface-variant">
-                    Outputs structured JSON containing assigned team, urgency badge, confidence score, and chain-of-thought rationale.
+                    Outputs structured JSON containing assigned team, urgency badge, confidence score, and concise decision rationale.
                   </p>
                 </div>
               </div>

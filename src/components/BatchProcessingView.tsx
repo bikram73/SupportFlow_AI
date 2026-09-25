@@ -83,7 +83,7 @@ export const BatchProcessingView: React.FC = () => {
     const generated = Array.from({ length: count }).map((_, i) => {
       const t = templates[i % templates.length];
       return {
-        id: `TK-GEN-${2000 + i}`,
+        id: `ANL-GEN-${2000 + i}`,
         subject: `${t.subject} (${i + 1})`,
         body: t.body
       };
@@ -114,7 +114,7 @@ export const BatchProcessingView: React.FC = () => {
           }
 
           return {
-            id: t.id || `TK-${Math.floor(1000 + Math.random() * 9000)}`,
+            id: t.id || `ANL-${Math.floor(1000 + Math.random() * 9000)}`,
             subject: t.subject,
             body: t.body,
             category: t.category,
@@ -145,7 +145,7 @@ export const BatchProcessingView: React.FC = () => {
         }
 
         return {
-          id: t.id || `TK-${Math.floor(1000 + Math.random() * 9000)}`,
+          id: t.id || `ANL-${Math.floor(1000 + Math.random() * 9000)}`,
           subject: sub,
           body: bodyText,
           category: triage.category,
@@ -239,7 +239,7 @@ export const BatchProcessingView: React.FC = () => {
 
   // Export functions
   const exportCSV = () => {
-    const headers = ['Ticket ID', 'Subject', 'Category', 'Urgency', 'Confidence', 'Assigned Team', 'Human Review', 'Reason'];
+    const headers = ['Analysis ID', 'Subject', 'Category', 'Urgency', 'Confidence', 'Assigned Team', 'Human Review', 'Reason'];
     const rows = filteredTickets.map((t) => [
       `"${t.id}"`,
       `"${t.subject.replace(/"/g, '""')}"`,

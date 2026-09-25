@@ -223,7 +223,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ onSelectTab, onTrySample }) 
             <div className="mt-20 p-8 rounded-3xl bg-surface-container-lowest text-on-surface flex flex-col md:flex-row items-center justify-between gap-8 border border-white/20 shadow-2xl">
               <div>
                 <h3 className="text-2xl font-bold mb-2">AI Explanations &amp; Transparency</h3>
-                <p className="text-on-surface-variant">Every AI decision includes a "Chain of Thought" reasoning block so your team understands the 'Why' behind every route.</p>
+                <p className="text-on-surface-variant">Every AI decision includes a clear AI Decision Rationale so your team understands the 'Why' behind every route.</p>
               </div>
               <button 
                 onClick={() => onSelectTab('about')}

@@ -5,9 +5,9 @@ import { DEFAULT_SAMPLE_TICKETS, ruleBasedTriage } from '../utils/triageFallback
 export const AnalyzeTicketView: React.FC = () => {
   const [subject, setSubject] = useState('');
   const [body, setBody] = useState('');
+  const [selectedSampleId, setSelectedSampleId] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<AnalyzedTicket | null>(null);
-  const [showReasoning, setShowReasoning] = useState(true);
   const [needsHumanReview, setNeedsHumanReview] = useState(false);
   const [sampleTickets, setSampleTickets] = useState<SampleTicketItem[]>(DEFAULT_SAMPLE_TICKETS);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -30,6 +30,7 @@ export const AnalyzeTicketView: React.FC = () => {
   const handleSelectSample = (sample: SampleTicketItem) => {
     setSubject(sample.subject);
     setBody(sample.body);
+    setSelectedSampleId(sample.id);
     setAnalysisResult(null);
     setErrorMessage(null);
   };
@@ -37,8 +38,8 @@ export const AnalyzeTicketView: React.FC = () => {
   const clearForm = () => {
     setSubject('');
     setBody('');
+    setSelectedSampleId(null);
     setAnalysisResult(null);
-    setShowReasoning(true);
     setNeedsHumanReview(false);
     setErrorMessage(null);
   };
@@ -55,20 +56,31 @@ export const AnalyzeTicketView: React.FC = () => {
       } else {
         setSubject("Cannot login");
         setBody("I have tried resetting my password but I still cannot access my account.");
+        setSelectedSampleId("ANL-1713");
       }
     }
 
     setIsAnalyzing(true);
     setErrorMessage(null);
 
-    const activeSub = cleanSub || 'No Subject Provided';
-    const activeBody = cleanBody || 'No Body Provided';
+    const activeSub = cleanSub || (sampleTickets[0]?.subject ?? 'Cannot login');
+    const activeBody = cleanBody || (sampleTickets[0]?.body ?? 'I have tried resetting my password but I still cannot access my account.');
+    
+    // Resolve appropriate analysis ID
+    let currentId = selectedSampleId;
+    if (!currentId) {
+      const matched = sampleTickets.find(
+        (s) => s.subject.toLowerCase() === activeSub.toLowerCase() || s.body.toLowerCase() === activeBody.toLowerCase()
+      );
+      currentId = matched ? matched.id : `ANL-${Math.floor(1000 + Math.random() * 9000)}`;
+    }
 
     try {
       const res = await fetch('/api/analyze-ticket', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          id: currentId,
           subject: activeSub,
           body: activeBody
         })
@@ -80,12 +92,12 @@ export const AnalyzeTicketView: React.FC = () => {
 
       const data = await res.json();
       const ticket: AnalyzedTicket = {
-        id: `TK-${Math.floor(1000 + Math.random() * 9000)}`,
+        id: data.id || currentId,
         subject: data.subject || activeSub,
         body: data.body || activeBody,
         category: data.category || 'General Question',
         urgency: data.urgency || 'Low',
-        confidence: typeof data.confidence === 'number' ? data.confidence : 85,
+        confidence: typeof data.confidence === 'number' ? data.confidence : 95,
         assignedTeam: data.assignedTeam || 'General Support',
         humanReview: Boolean(data.humanReview),
         reason: data.reason || 'Processed by SupportFlow AI.',
@@ -98,7 +110,7 @@ export const AnalyzeTicketView: React.FC = () => {
       console.warn('API route unreachable, executing client-side fallback triage:', err);
       const fallback = ruleBasedTriage(activeSub, activeBody);
       const ticket: AnalyzedTicket = {
-        id: `TK-${Math.floor(1000 + Math.random() * 9000)}`,
+        id: currentId,
         subject: activeSub,
         body: activeBody,
         category: fallback.category,
@@ -206,7 +218,10 @@ export const AnalyzeTicketView: React.FC = () => {
                     id="ticket-subject"
                     type="text"
                     value={subject}
-                    onChange={(e) => setSubject(e.target.value)}
+                    onChange={(e) => {
+                      setSubject(e.target.value);
+                      setSelectedSampleId(null);
+                    }}
                     placeholder="e.g. Cannot login after resetting password"
                     className="w-full px-4 py-3 rounded-xl bg-surface-container-low border border-outline-variant focus:border-primary focus:outline-none transition-all text-sm text-on-surface placeholder:text-outline"
                   />
@@ -220,7 +235,10 @@ export const AnalyzeTicketView: React.FC = () => {
                     id="ticket-desc"
                     rows={6}
                     value={body}
-                    onChange={(e) => setBody(e.target.value)}
+                    onChange={(e) => {
+                      setBody(e.target.value);
+                      setSelectedSampleId(null);
+                    }}
                     placeholder="Enter customer message, error trace, or email body..."
                     className="w-full px-4 py-3 rounded-xl bg-surface-container-low border border-outline-variant focus:border-primary focus:outline-none transition-all text-sm text-on-surface placeholder:text-outline resize-none"
                   ></textarea>
@@ -353,22 +371,24 @@ export const AnalyzeTicketView: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Decision Boundary & Human Review Toggle */}
+                {/* Human Review Status Box */}
                 <div className="p-4 bg-surface-bright rounded-2xl border border-outline-variant flex items-center justify-between gap-4">
                   <div className="flex items-center gap-3">
-                    <span className={`material-symbols-outlined ${needsHumanReview ? 'text-amber-600' : 'text-emerald-600'}`}>
-                      {needsHumanReview ? 'person_search' : 'verified_user'}
+                    <span className={`material-symbols-outlined text-[22px] ${needsHumanReview ? 'text-amber-600' : 'text-emerald-600'}`}>
+                      {needsHumanReview ? 'warning' : 'check_circle'}
                     </span>
                     <div>
-                      <span className="text-xs font-bold text-on-surface block">Human Review Flag</span>
+                      <span className="text-xs font-bold text-on-surface block">
+                        {needsHumanReview ? 'Human Review Required' : '✓ Human Review Not Required'}
+                      </span>
                       <span className="text-[11px] text-outline">
                         {needsHumanReview
-                          ? 'Flagged: Confidence score below 70% threshold or ticket is ambiguous.'
-                          : 'Auto-Routing Approved: High confidence classification score.'}
+                          ? 'Flagged for human operator review (<70% confidence threshold or ambiguous context).'
+                          : 'High confidence threshold met (≥90%). Automated routing approved.'}
                       </span>
                     </div>
                   </div>
-                  <label className="relative inline-flex items-center cursor-pointer shrink-0">
+                  <label className="relative inline-flex items-center cursor-pointer shrink-0" title="Toggle Manual Human Review Override">
                     <input
                       type="checkbox"
                       checked={needsHumanReview}
@@ -379,41 +399,26 @@ export const AnalyzeTicketView: React.FC = () => {
                   </label>
                 </div>
 
-                {/* AI Reasoning Rationale Accordion */}
-                <div className="border border-outline-variant rounded-2xl overflow-hidden bg-white">
-                  <button
-                    type="button"
-                    onClick={() => setShowReasoning(!showReasoning)}
-                    className="w-full p-4 flex items-center justify-between bg-surface-container-low hover:bg-surface-container-high transition-colors text-left cursor-pointer"
-                  >
-                    <span className="font-bold text-xs sm:text-sm text-on-surface flex items-center gap-2">
-                      <span className="material-symbols-outlined text-primary text-[18px]">psychology</span>
-                      AI Decision Rationale &amp; Chain-of-Thought
+                {/* AI Decision Rationale Box */}
+                <div className="border border-outline-variant rounded-2xl overflow-hidden bg-white shadow-2xs">
+                  <div className="w-full px-5 py-3.5 bg-surface-container-low border-b border-outline-variant flex items-center gap-2">
+                    <span className="material-symbols-outlined text-primary text-[18px]">psychology</span>
+                    <span className="font-bold text-xs sm:text-sm text-on-surface">
+                      AI Decision Rationale
                     </span>
-                    <span className="material-symbols-outlined text-outline">
-                      {showReasoning ? 'expand_less' : 'expand_more'}
-                    </span>
-                  </button>
-
-                  {showReasoning && (
-                    <div className="p-4 text-xs sm:text-sm text-on-surface-variant bg-surface-bright border-t border-outline-variant space-y-3">
-                      <p className="leading-relaxed font-normal text-on-surface bg-primary/5 p-3 rounded-xl border border-primary/10">
-                        "{analysisResult.reason}"
-                      </p>
-                      <div className="text-xs text-outline space-y-1">
-                        <div>• <strong>Category Selection:</strong> {analysisResult.category}</div>
-                        <div>• <strong>Urgency Assessment:</strong> {analysisResult.urgency}</div>
-                        <div>• <strong>Destination Department:</strong> {analysisResult.assignedTeam}</div>
-                      </div>
-                    </div>
-                  )}
+                  </div>
+                  <div className="p-5 text-xs sm:text-sm text-on-surface bg-surface-bright">
+                    <p className="leading-relaxed text-on-surface">
+                      {analysisResult.reason}
+                    </p>
+                  </div>
                 </div>
               </div>
             )}
 
             <div className="pt-4 border-t border-outline-variant flex justify-between items-center text-xs text-outline mt-auto">
-              <span>Engine: SupportFlow Triage v2</span>
-              <span>Ticket ID: {analysisResult ? analysisResult.id : 'N/A'}</span>
+              <span>SupportFlow Triage v2</span>
+              <span>Analysis ID: {analysisResult ? analysisResult.id : 'N/A'}</span>
             </div>
           </div>
         </div>
@@ -433,7 +438,7 @@ export const AnalyzeTicketView: React.FC = () => {
               analysisResult ? 'bg-primary/10 border-primary/40' : 'bg-surface-container-low border-outline-variant'
             }`}>
               <span className="text-[10px] font-bold text-outline uppercase block mb-1">STAGE 02</span>
-              <span className="font-bold text-on-surface text-sm block mb-1">AI Reasoning Analysis</span>
+              <span className="font-bold text-on-surface text-sm block mb-1">AI Intent Analysis</span>
               <p className="text-xs text-on-surface-variant">Intent extraction, sentiment &amp; priority evaluated.</p>
             </div>
             <div className={`p-4 rounded-2xl border transition-colors ${
