@@ -1,25 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { BatchTicket, AnalyzedTicket } from '../types';
-import { DEFAULT_SAMPLE_TICKETS, ruleBasedTriage } from '../utils/triageFallback';
+import React, { useState } from 'react';
+import { BatchTicket } from '../types';
+import { ruleBasedTriage } from '../utils/triageFallback';
 import { useTickets } from '../context/TicketContext';
 
 export const BatchProcessingView: React.FC = () => {
-  const { tickets: contextTickets, addBatchTickets, clearTickets: clearGlobalTickets } = useTickets();
-  const [tickets, setTickets] = useState<BatchTicket[]>(() => {
-    return contextTickets.map((t) => ({
-      id: t.id,
-      subject: t.subject,
-      body: t.body,
-      category: t.category,
-      urgency: t.urgency,
-      confidence: t.confidence,
-      assignedTeam: t.assignedTeam,
-      humanReview: t.humanReview,
-      routingStatus: t.routingStatus,
-      reason: t.reason,
-      status: t.routingStatus
-    }));
-  });
+  const { addBatchTickets } = useTickets();
+  // BatchProcessingView starts completely CLEAN initially
+  const [tickets, setTickets] = useState<BatchTicket[]>([]);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All');
@@ -31,25 +18,6 @@ export const BatchProcessingView: React.FC = () => {
   const [customText, setCustomText] = useState<string>('');
   const [showPasteModal, setShowPasteModal] = useState(false);
   const itemsPerPage = 8;
-
-  // Keep local view synced with global TicketContext
-  useEffect(() => {
-    setTickets(
-      contextTickets.map((t) => ({
-        id: t.id,
-        subject: t.subject,
-        body: t.body,
-        category: t.category,
-        urgency: t.urgency,
-        confidence: t.confidence,
-        assignedTeam: t.assignedTeam,
-        humanReview: t.humanReview,
-        routingStatus: t.routingStatus,
-        reason: t.reason,
-        status: t.routingStatus
-      }))
-    );
-  }, [contextTickets]);
 
   const handleGenerateSamples = async (count: number) => {
     setIsProcessing(true);
@@ -327,7 +295,6 @@ export const BatchProcessingView: React.FC = () => {
   };
 
   const handleClearBatch = () => {
-    clearGlobalTickets();
     setTickets([]);
     setCurrentPage(1);
   };
@@ -356,7 +323,7 @@ export const BatchProcessingView: React.FC = () => {
     currentPage * itemsPerPage
   );
 
-  // Compute live local metrics
+  // Compute live local metrics for current batch
   const totalCount = tickets.length;
   const criticalCount = tickets.filter((t) => t.urgency === 'Critical').length;
   const highCount = tickets.filter((t) => t.urgency === 'High').length;
@@ -414,8 +381,8 @@ export const BatchProcessingView: React.FC = () => {
                 Bulk Ticket Ingestion &amp; Batch Processing
               </h1>
               {totalCount > 0 && (
-                <span className="px-2.5 py-0.5 bg-emerald-100 text-emerald-800 rounded-full text-[11px] font-bold">
-                  {totalCount} Stored in LocalStorage
+                <span className="px-2.5 py-0.5 bg-primary/10 text-primary rounded-full text-[11px] font-bold">
+                  {totalCount} Batch Items
                 </span>
               )}
             </div>
@@ -441,8 +408,8 @@ export const BatchProcessingView: React.FC = () => {
                 onClick={handleClearBatch}
                 className="px-3 py-2 bg-surface-container-low hover:bg-error/10 hover:text-error hover:border-error/30 border border-outline-variant text-outline rounded-xl text-xs font-bold transition-all flex items-center gap-1 cursor-pointer"
               >
-                <span className="material-symbols-outlined text-[16px]">delete_sweep</span>
-                Clear Batch
+                <span className="material-symbols-outlined text-[16px]">clear_all</span>
+                Reset Batch View
               </button>
             )}
           </div>
@@ -453,7 +420,7 @@ export const BatchProcessingView: React.FC = () => {
           <div className="bg-surface-container-lowest p-3.5 sm:p-5 rounded-2xl border border-outline-variant shadow-xs">
             <span className="text-[11px] sm:text-xs font-bold text-outline block mb-1">Total Ingested</span>
             <div className="text-2xl sm:text-3xl font-extrabold text-on-surface">{totalCount}</div>
-            <span className="text-[10px] sm:text-[11px] text-outline mt-1 block">Active Dataset</span>
+            <span className="text-[10px] sm:text-[11px] text-outline mt-1 block">Active Batch</span>
           </div>
 
           <div className="bg-surface-container-lowest p-3.5 sm:p-5 rounded-2xl border border-outline-variant shadow-xs">
@@ -495,7 +462,7 @@ export const BatchProcessingView: React.FC = () => {
               <span className="text-2xl sm:text-3xl font-extrabold text-primary">{avgConfidence}%</span>
               <span className="material-symbols-outlined text-primary text-[20px]">auto_awesome</span>
             </div>
-            <span className="text-[10px] sm:text-[11px] text-outline mt-1 block">AI Confidence Score</span>
+            <span className="text-[10px] sm:text-[11px] text-outline mt-1 block">Batch Confidence</span>
           </div>
         </div>
 
@@ -629,7 +596,7 @@ export const BatchProcessingView: React.FC = () => {
                   No Batch Tickets Loaded Yet
                 </h3>
                 <p className="text-xs text-outline max-w-md mx-auto mb-6">
-                  Upload your support CSV file, paste raw text, or tap "Load 25 CSV" to analyze and route tickets. All processed tickets will be saved in your browser and reflected on the live dashboard.
+                  Upload your support CSV file, paste raw text, or tap "Load 25 CSV" to analyze and route tickets. Processed tickets will be added to your session and reflected on the live dashboard.
                 </p>
                 <div className="flex flex-wrap justify-center gap-2.5">
                   <button
@@ -654,7 +621,7 @@ export const BatchProcessingView: React.FC = () => {
                   <div>
                     <h3 className="font-bold text-base sm:text-lg text-on-surface">Batch Results</h3>
                     <span className="text-[11px] sm:text-xs text-outline">
-                      Showing {filteredTickets.length} of {tickets.length} tickets (Saved in LocalStorage)
+                      Showing {filteredTickets.length} of {tickets.length} batch tickets
                     </span>
                   </div>
 

@@ -29,14 +29,20 @@ export const DashboardView: React.FC<DashboardViewProps> = ({ onSelectTab }) => 
         {/* Top Bar Controls */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 bg-surface-container-lowest p-4 sm:p-6 rounded-3xl border border-outline-variant shadow-xs">
           <div>
-            <div className="flex items-center gap-2 mb-1">
+            <div className="flex flex-wrap items-center gap-2 mb-1">
               <h1 className="text-xl sm:text-2xl font-extrabold text-on-surface tracking-tight">
                 Live Support Ticket Analytics
               </h1>
               <span className="flex items-center gap-1.5 px-2.5 py-0.5 bg-emerald-100 text-emerald-800 rounded-full text-[11px] font-bold">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                Live User Activity
+                Live Activity
               </span>
+              {tickets.length > 0 && (
+                <span className="flex items-center gap-1 px-2.5 py-0.5 bg-primary/10 text-primary rounded-full text-[11px] font-bold">
+                  <span className="material-symbols-outlined text-[13px]">inventory_2</span>
+                  {tickets.length} Saved in LocalStorage
+                </span>
+              )}
             </div>
             <p className="text-xs text-on-surface-variant">
               Metrics and queue distributions updated dynamically from your analyzed &amp; uploaded tickets.
