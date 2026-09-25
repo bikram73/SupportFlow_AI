@@ -42,7 +42,7 @@ export default function App() {
           )}
 
           {currentTab === 'qa' && (
-            <QAValidationView />
+            <QAValidationView onSelectTab={setCurrentTab} />
           )}
 
           {currentTab === 'about' && (
